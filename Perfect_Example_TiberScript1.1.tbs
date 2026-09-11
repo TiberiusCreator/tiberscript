@@ -378,9 +378,9 @@ update() = function
   during "menu" do
     screen.clear("#000033")
     screen.text(game_config.title, 0, 30, 26, "gold")
-    screen.text("SPACE to start", 0, -10, 16, "white")
+    screen.text("Press Enter to start", 0, -10, 16, "white")
     screen.text("L to load save", 0, -35, 14, "#aaa")
-    if key("space").hit then
+    if key("enter").hit then
       sfx("menu_select")
       transit("game")
     end
