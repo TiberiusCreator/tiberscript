@@ -1,0 +1,439 @@
+/*
+  Tiberian Odyssey 1.1
+  A comprehensive TiberScript 1.1 example showcasing the full language.
+  Created by TiberiusCreator
+*/
+
+// Global configuration using a data block.
+// Data blocks define static game settings in one clean place.
+game_config = data
+  title          = "Tiberian Odyssey 1.1"
+  initial_hp     = 100
+  move_speed     = 3
+  enemy_damage   = 10
+  potion_heal    = 25
+  max_crystals   = 5
+  music          = "main_theme"
+  sfx_hit        = "hit_sound"
+  sfx_collect    = "collect_sound"
+  sfx_heal       = "heal_sound"
+  sfx_victory    = "victory_fanfare"
+  sfx_game_over  = "game_over_buzz"
+  sfx_save       = "save_chime"
+  sfx_fail       = "fail_sound"
+end
+
+// Utility functions defined at the top level.
+// These are available anywhere in the script after this point.
+clampX(val) = function
+  if val < -150 then return -150 end
+  if val >  150 then return  150 end
+  return val
+end
+
+clampY(val) = function
+  if val < -90 then return -90 end
+  if val >  90 then return  90 end
+  return val
+end
+
+isLowHp(hp) = function
+  return hp < game_config.initial_hp * 0.3
+end
+
+// Player class.
+// mark() tags this object so collide() and near() can find it.
+player_class = class
+  init(name_given) = function
+    this.name          = name_given
+    this.hp            = game_config.initial_hp
+    this.x             = 0
+    this.y             = 0
+    this.score         = 0
+    this.crystals      = 0
+    this.inventory     = ["Heal Potion", "Heal Potion"]
+    this.damaged       = false
+    this.mark("player")
+    print("Player '" + this.name + "' ready.")
+  end
+
+  // key().held gives continuous movement. key().hit fires once per press.
+  // clamp helpers keep the player inside the play area.
+  move() = function
+    if key("arrowRight").held then this.x += game_config.move_speed end
+    if key("arrowLeft").held  then this.x -= game_config.move_speed end
+    if key("arrowUp").held    then this.y += game_config.move_speed end
+    if key("arrowDown").held  then this.y -= game_config.move_speed end
+    this.x = clampX(this.x)
+    this.y = clampY(this.y)
+  end
+
+  // near() returns the closest object with the given tag within range.
+  // If found, a prompt is shown and E triggers the interaction.
+  interact() = function
+    local npc = near("npc", 50)
+    if npc then
+      screen.text("Press E to talk to " + npc.name, 0, -80, 13, "#aaa")
+      if key("e").hit then
+        npc.talk()
+      end
+    end
+  end
+
+  take_damage(amount) = function
+    this.hp      -= amount
+    this.damaged  = true
+    sfx(game_config.sfx_hit)
+    emit("impact_particles", this.x, this.y, 3)
+    print(this.name + " took " + amount + " damage. HP: " + this.hp)
+    if this.hp <= 0 then
+      transit("gameOver")
+    end
+  end
+
+  // indexOf and removeAt are list operations built into TiberScript 1.1.
+  use_potion() = function
+    local idx = this.inventory.indexOf("Heal Potion")
+    if idx >= 0 and this.hp < game_config.initial_hp then
+      this.inventory.removeAt(idx)
+      this.hp = min(this.hp + game_config.potion_heal, game_config.initial_hp)
+      sfx(game_config.sfx_heal)
+      emit("heal_particles", this.x, this.y, 10)
+      print("Used potion. HP: " + this.hp)
+    elsetry idx < 0 then
+      print("No potions left!")
+    else
+      print("Already at full health!")
+    end
+  end
+
+  // access opens a save slot. It saves automatically when the block closes.
+  save() = function
+    access "odyssey_save" as file do
+      file.name      = this.name
+      file.hp        = this.hp
+      file.x         = this.x
+      file.y         = this.y
+      file.score     = this.score
+      file.crystals  = this.crystals
+      print("Saved!")
+      sfx(game_config.sfx_save)
+    end
+  end
+
+  load() = function
+    if exists("odyssey_save") then
+      access "odyssey_save" as file do
+        this.name     = file.name
+        this.hp       = file.hp
+        this.x        = file.x
+        this.y        = file.y
+        this.score    = file.score
+        this.crystals = file.crystals
+        print("Loaded!")
+        sfx(game_config.sfx_save)
+      end
+    else
+      print("No save found.")
+    end
+  end
+
+  // alter applies a visual transform only to draws inside the block.
+  // It resets automatically when the block ends — no cleanup needed.
+  draw() = function
+    if this.damaged then
+      alter opacity=0.6, scale=1.15 do
+        screen.fillRect(this.x, this.y, 22, 22, "red")
+      end
+      this.damaged = false
+    else
+      screen.fillRect(this.x, this.y, 22, 22, "cyan")
+    end
+    screen.text("HP " + this.hp, this.x, this.y + 18, 12, "white")
+  end
+end
+
+// Enemy class.
+// Moves toward the player when within range and deals damage on contact.
+enemy_class = class
+  init(id_num) = function
+    this.id    = "Enemy " + id_num
+    this.x     = random(-120, 120)
+    this.y     = random(-60, 60)
+    this.speed = random(1, 2)
+    this.alive = true
+    this.mark("enemy")
+  end
+
+  update(tx, ty) = function
+    if not this.alive then return end
+    local d = distance(this.x, this.y, tx, ty)
+    if d < 150 then
+      if this.x < tx then this.x += this.speed end
+      if this.x > tx then this.x -= this.speed end
+      if this.y < ty then this.y += this.speed end
+      if this.y > ty then this.y -= this.speed end
+      local p = collide("player")
+      if p then
+        p.take_damage(game_config.enemy_damage)
+      end
+    end
+  end
+
+  draw() = function
+    if not this.alive then return end
+    screen.fillRect(this.x, this.y, 20, 20, "red")
+  end
+
+  // vanish() removes the object from all future collide() and near() checks.
+  die() = function
+    print(this.id + " defeated!")
+    emit("explosion_particles", this.x, this.y, 15)
+    sfx("enemy_explode")
+    this.alive = false
+    this.vanish()
+  end
+end
+
+// Crystal class.
+// Collectible items. wave() creates a smooth floating animation each frame.
+crystal_class = class
+  init(cx, cy) = function
+    this.x         = cx
+    this.y         = cy
+    this.collected = false
+    this.mark("collectible")
+  end
+
+  draw() = function
+    if this.collected then return end
+    local float_y = this.y + wave(0, 4)
+    alter scale=1.0, opacity=0.85 do
+      screen.fillCircle(this.x, float_y, 8, "gold")
+    end
+  end
+
+  collect(collector) = function
+    if this.collected then return end
+    this.collected   = true
+    collector.score  += 150
+    collector.crystals += 1
+    sfx(game_config.sfx_collect)
+    emit("sparkle_particles", this.x, this.y, 8)
+    print("Crystal collected! Score: " + collector.score)
+    this.vanish()
+  end
+end
+
+// Base character class.
+// Shared foundation for all world characters that can be spoken to.
+character_class = class
+  init(name, x, y) = function
+    this.name = name
+    this.x    = x
+    this.y    = y
+    this.mark("interactable")
+  end
+
+  talk() = function
+    print(this.name + " says: Hello, traveler!")
+  end
+
+  draw() = function
+    screen.fillRect(this.x, this.y, 20, 20, "#aaf")
+    screen.text(this.name, this.x, this.y + 16, 11, "#aaf")
+  end
+end
+
+// Quest giver class.
+// Extends the base character class. super.init() runs the parent constructor.
+quest_giver = class extends character_class
+  init() = function
+    super.init("Elder Tim", 80, 40)
+    this.quest_given = false
+    this.mark("npc")
+  end
+
+  talk() = function
+    if not this.quest_given then
+      print(this.name + ": The Crystal of Harmony is shattered!")
+      print("Collect " + game_config.max_crystals + " shards to restore the world.")
+      this.quest_given = true
+      // schedule runs a function after a delay in frames.
+      // 60 frames is roughly one second at standard frame rate.
+      schedule(600) = function
+        print("Elder Tim whispers: Keep searching!")
+      end
+    elsetry player.crystals >= game_config.max_crystals then
+      print(this.name + ": You have done it! The world is saved!")
+      transit("win")
+    else
+      local remaining = game_config.max_crystals - player.crystals
+      print(this.name + ": You still need " + remaining + " crystals.")
+    end
+  end
+end
+
+// Global game objects.
+player   = null
+enemies  = []
+crystals = []
+npcs     = []
+
+// Sets up all game objects and starts the music.
+init() = function
+  player = new player_class("Hero")
+
+  for i = 1 to 3
+    enemies.push(new enemy_class(i))
+  end
+
+  crystals.push(new crystal_class(-100, -50))
+  crystals.push(new crystal_class( 100, -50))
+  crystals.push(new crystal_class(-100,  50))
+  crystals.push(new crystal_class( 100,  50))
+  crystals.push(new crystal_class(   0,   0))
+
+  npcs.push(new quest_giver())
+
+  tune(game_config.music)
+  print("Welcome to " + game_config.title)
+  transit("menu")
+end
+
+// Main game loop. during blocks keep each state's logic fully separated.
+update() = function
+
+  during "menu" do
+    screen.clear("#000033")
+    screen.text(game_config.title, 0, 30, 26, "gold")
+    screen.text("SPACE to start", 0, -10, 16, "white")
+    screen.text("L to load save", 0, -35, 14, "#aaa")
+    if key("space").hit then
+      sfx("menu_select")
+      transit("game")
+    end
+    if key("l").hit then
+      player.load()
+      transit("game")
+    end
+  end
+
+  during "game" do
+    screen.clear("#141428")
+
+    player.move()
+    player.interact()
+
+    if key("h").hit then player.use_potion() end
+    if key("s").hit then player.save()       end
+
+    if key("p").hit then
+      transit("paused")
+    end
+
+    local gem = collide("collectible")
+    if gem then
+      gem.collect(player)
+    end
+
+    if player.crystals >= game_config.max_crystals then
+      transit("win")
+    end
+
+    for e in enemies
+      e.update(player.x, player.y)
+    end
+
+    // attempt runs the block and jumps to recover if anything goes wrong.
+    // This prevents a single bad line from crashing the whole game.
+    if key("r").hit then
+      sfx(game_config.sfx_fail)
+      attempt
+        local chance = random(100)
+        if chance < 30 then
+          local bad = undefined_var.value
+        end
+        player.score += 500
+        print("Risky action worked! +500 score.")
+      recover
+        print("Risky action failed.")
+        player.take_damage(20)
+      end
+    end
+
+    // every runs its body automatically every N frames with no timer variable.
+    every(300) do
+      emit("ambient_particles", random(-140, 140), random(-80, 80), 2)
+    end
+
+    // view offsets all draws inside by the camera position.
+    view x=player.x * 0.3, y=player.y * 0.3 do
+      for e in enemies
+        e.draw()
+      end
+      for c in crystals
+        c.draw()
+      end
+      for n in npcs
+        n.draw()
+      end
+      player.draw()
+    end
+
+    screen.text("Score: "    + player.score,                              -140, 85, 13, "gold")
+    screen.text("Crystals: " + player.crystals + "/" + game_config.max_crystals, 0, 85, 13, "white")
+
+    // elsetry creates a clean waterfall of conditions.
+    if isLowHp(player.hp) then
+      screen.text("CRITICAL HP!", 0, 70, 14, "red")
+      alter opacity=0.15 do
+        screen.fillRect(0, 0, 320, 200, "red")
+      end
+    elsetry player.hp < game_config.initial_hp * 0.6 then
+      screen.text("Status: Injured", 0, 70, 13, "orange")
+    else
+      screen.text("Status: Healthy", 0, 70, 13, "green")
+    end
+
+    screen.text("H heal   S save   P pause   R risky", 0, -85, 11, "#555")
+  end
+
+  during "paused" do
+    screen.clear("#111")
+    screen.text("PAUSED", 0, 20, 28, "white")
+    screen.text("Press P to resume", 0, -15, 15, "#aaa")
+    silence(game_config.music)
+    if key("p").hit then
+      tune(game_config.music)
+      transit("game")
+    end
+  end
+
+  during "gameOver" do
+    silence("all")
+    screen.clear("black")
+    screen.text("GAME OVER", 0, 25, 32, "red")
+    screen.text("Score: " + player.score, 0, -5, 18, "white")
+    screen.text("SPACE to restart", 0, -35, 14, "#aaa")
+    sfx(game_config.sfx_game_over)
+    if key("space").hit then
+      init()
+    end
+  end
+
+  during "win" do
+    silence("all")
+    screen.clear("#002200")
+    screen.text("VICTORY!", 0, 30, 34, "gold")
+    screen.text("Crystal of Harmony restored!", 0, 0, 15, "white")
+    screen.text("Final Score: " + player.score, 0, -25, 17, "#afa")
+    screen.text("SPACE for menu", 0, -55, 13, "#aaa")
+    sfx(game_config.sfx_victory)
+    if key("space").hit then
+      init()
+      transit("menu")
+    end
+  end
+
+end
