@@ -47,9 +47,9 @@ player_archetype = archetype
   move() = function
     local moved = false
     if key("arrowRight").held then this.x += game_config.player_move_speed moved = true end
-    if key("arrowLeft").held  then this.x -= game_config.player_move_speed moved = true end
-    if key("arrowUp").held    then this.y -= game_config.player_move_speed moved = true end
-    if key("arrowDown").held  then this.y += game_config.player_move_speed moved = true end
+    if key("arrowLeft").held then this.x -= game_config.player_move_speed moved = true end
+    if key("arrowUp").held then this.y -= game_config.player_move_speed moved = true end
+    if key("arrowDown").held then this.y += game_config.player_move_speed moved = true end
     this.x = clamp(this.x, 20, 300)
     this.y = clamp(this.y, 20, 200)
     return moved
