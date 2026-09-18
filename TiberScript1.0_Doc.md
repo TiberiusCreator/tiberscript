@@ -166,8 +166,8 @@ TiberScript distinguishes between a **Tap** (Intent) and a **Hold** (Action).
 * **`.held`**: Returns `true` *continuously* while down (Movement, Charging).
 
 ```tiberscript
-if key("arrowRight").held then walk() end  // Continuous
-if key("space").hit then jump() end        // One-time action
+if key("arrowRight").held then walk() end // Continuous
+if key("space").hit then jump() end // One-time action
 
 ```
 
@@ -175,7 +175,7 @@ if key("space").hit then jump() end        // One-time action
 
 ## 5. Visuals & Audio (Scoped Effects)
 
-TiberScript uses **Scoped Blocks** to apply effects. This prevents bugs where effects "leak" to other parts of the game (e.g., forgetting to turn off transparency).
+TiberScript uses **Scoped Blocks** to apply effects. This prevents bugs where effects "leak" to other parts of the game, like forgetting to turn off transparency.
 
 ### Graphics (`screen`)
 
@@ -385,7 +385,7 @@ update() = function
       transit("gameOver")
     end
     
-    // Rendering — draw all enemies with a for loop
+    // Rendering, draw all enemies with a for loop
     view x=player.x, y=player.y do
       player.draw()
       for e in enemies
