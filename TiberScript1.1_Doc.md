@@ -12,7 +12,7 @@
 
 ## What's New in 1.1
 
-Everything listed in this handbook now **actually runs** in the engine. Version 1.0 was a vision: 1.1 is the real thing.
+Everything listed in this handbook now **actually runs** in the engine. Version 1.0 was a vision. 1.1 is the real thing.
 
 - **Real parser.** Extra spaces, blank lines, and comments all work correctly.
 - **Script-level variables.** `score = 0` and `score += 100` are real assignments.
@@ -22,7 +22,7 @@ Everything listed in this handbook now **actually runs** in the engine. Version 
 - **`while` loops** work. `while hp > 0 do ... end` loops until false.
 - **User-defined functions** work. Define `heal(amount) = function ... end` and call it anywhere.
 - **`attempt / recover`** works. The engine actually executes error handling blocks.
-- **Any key works** in `key("x").hit` / `.held`: not just arrows and space.
+- **Any key works** in `key("x").hit` / `.held`, not just arrows and space.
 - **Mouse input**: `mouse.x`, `mouse.y`, `mouse.hit`, `mouse.held`.
 - **Dynamic objects**: any object name auto-creates itself. No engine edits needed.
 - **`screen.sprite()`** draws real microStudio sprite assets.
@@ -47,14 +47,14 @@ All 1.0 scripts run unchanged.
 
 TiberScript supports two comment styles.
 
-Use `//` for a single-line comment: everything after it on that line is ignored:
+Use `//` for a single-line comment. Everything after it on that line is ignored:
 
 ```tiberscript
-speed = 5  // this is how fast the player moves
+speed = 5 // this is how fast the player moves
 
 ```
 
-Use `/* ... */` for a block comment: great for long notes, disabling a chunk of code, or writing a header at the top of your script:
+Use `/* ... */` for a block comment. Great for long notes, disabling a chunk of code, or writing a header at the top of your script:
 
 ```tiberscript
 /*
@@ -210,7 +210,7 @@ score += 100
 if player.x > 100 then transit("nextRoom") end
 if hp <= 0 then transit("gameOver") end
 
-// Logic — combine conditions
+// Logic: combine conditions
 if alive and not stunned then
   player.x += speed
 end
@@ -225,15 +225,15 @@ end
 
 TiberScript has three special values:
 
-* **`true`** — a positive/on condition.
-* **`false`** — a negative/off condition.
-* **`null`** — means nothing, empty, or not found. `collide()` returns `null` when nothing is hit.
+* **`true`**: a positive or on condition.
+* **`false`**: a negative or off condition.
+* **`null`**: means nothing, empty, or not found. `collide()` returns `null` when nothing is hit.
 
 ```tiberscript
 isAlive = true
 gameStarted = false
 
-// Check for null — collide returns null if nothing was hit
+// collide returns null if nothing was hit
 local hit = collide("currency")
 if hit then
   score += 100
@@ -255,7 +255,7 @@ end
 
 ```
 
-Use `while` when you don't know how many iterations you need: it loops until the condition becomes false.
+Use `while` when you don't know how many iterations you need. It loops until the condition becomes false.
 
 ```tiberscript
 while hp > 0 do
@@ -270,12 +270,12 @@ The `by` keyword sets the step size. Without it the default step is 1. Use a neg
 ```tiberscript
 // Count by 2s
 for i = 0 to 10 by 2
-  print(i)  // 0, 2, 4, 6, 8, 10
+  print(i) // 0, 2, 4, 6, 8, 10
 end
 
 // Count backwards
 for i = 5 to 0 by -1
-  print(i)  // 5, 4, 3, 2, 1, 0
+  print(i) // 5, 4, 3, 2, 1, 0
 end
 
 ```
@@ -365,7 +365,7 @@ inventory.removeAt(0)
 
 ## 2. Object-Oriented Programming (Archetypes)
 
-The heart of TiberScript is the **Archetype**. You can write it as `archetype` or the shorter `class` — both work identically.
+The heart of TiberScript is the **Archetype**. You can write it as `archetype` or the shorter `class`. Both work identically.
 
 ### Defining an Archetype
 
@@ -384,7 +384,7 @@ enemy = archetype
   end
 end
 
-// Using 'class' (shorter alias — same thing!)
+// Using 'class' (shorter alias, same thing)
 enemy = class
   init(name) = function
     this.name = name
@@ -412,7 +412,7 @@ end
 
 ```
 
-Every `new` call runs that archetype's `init()` with the arguments you pass. The result is a fully independent object — changing `coin1.x` does not affect `coin2.x`.
+Every `new` call runs that archetype's `init()` with the arguments you pass. The result is a fully independent object. Changing `coin1.x` does not affect `coin2.x`.
 
 ### Inheritance (`extends`)
 
@@ -439,7 +439,7 @@ TiberScript manages the game loop via **States**. Never use messy variables (`if
 * **`transit("name")`**: Switches the engine to a new state immediately.
 * **`during "name" do`**: Logic that only runs while in that specific state.
 
-> **Note:** If you `transit()` to a state that has no matching `during` block, the screen will go blank. Always make sure every state you transit to has a `during` block handling it: even if it just shows a message.
+> **Note:** If you `transit()` to a state that has no matching `during` block, the screen will go blank. Always make sure every state you transit to has a `during` block handling it, even if it just shows a message.
 
 ```tiberscript
 update() = function
@@ -469,7 +469,7 @@ if key("space").hit then jump() end
 
 ```
 
-Any key string works: not just arrow keys and space:
+Any key string works, not just arrow keys and space:
 
 ```tiberscript
 if key("e").hit then interact() end
@@ -504,7 +504,7 @@ TiberScript uses **Scoped Blocks** to apply effects. This prevents bugs where ef
 
 * **`screen.clear(color)`**: Clear the screen with a color before drawing each frame.
 * **`screen.text(text)`**: Draw text centered on screen. Smart-positions itself based on current state.
-* **`screen.text(text, x, y, size, color)`**: Draw text at a precise position with full control. Same function — extra parameters unlock full control.
+* **`screen.text(text, x, y, size, color)`**: Draw text at a precise position with full control. Same function, extra parameters unlock full control.
 * **`screen.sprite(id, x, y, size)`**: Draw a microStudio sprite asset.
 * **`screen.fillRect(x, y, w, h, color)`**: Draw a filled rectangle.
 * **`screen.fillCircle(x, y, radius, color)`**: Draw a filled circle.
@@ -710,7 +710,7 @@ end
 
 ```
 
-Unknown commands no longer fail silently: they are logged and printed to the console automatically.
+Unknown commands no longer fail silently. They are logged and printed to the console automatically.
 
 ---
 
@@ -899,7 +899,7 @@ flash("white", 1, 20)
 
 | Category | Keyword / Syntax | Description |
 | --- | --- | --- |
-| **Structure** | `archetype` / `class`, `data`, `init` | Two ways to define a class — both identical. |
+| **Structure** | `archetype` / `class`, `data`, `init` | Two ways to define a class, both identical. |
 | **Instances** | `new ArchetypeName(args)` | Create a living copy of an archetype. |
 | **Flow** | `during "state" do` | Managing game states. |
 | **Logic** | `elsetry`, `random(n)` | Control flow and math. |
@@ -912,7 +912,7 @@ flash("white", 1, 20)
 | **Return** | `return value` | Send a value back from a function. |
 | **Strings** | `"a" + b`, `.length`, `.charAt(i)` | Concatenation and string operations. |
 | **Arrays** | `list.push()`, `list[i]`, `.length` | Lists of values. |
-| **Errors** | `attempt ... recover` | Error handling — runs recover on failure. |
+| **Errors** | `attempt ... recover` | Error handling, runs recover on failure. |
 | **Debug** | `debug(msg)` | Print and log a value from a script. |
 | **Input** | `key("k").hit` / `.held` | Keyboard: trigger vs continuous. |
 | **Mouse** | `mouse.x`, `mouse.y`, `mouse.hit` | Cursor position and click. |
