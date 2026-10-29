@@ -8,9 +8,11 @@
 
 **Special Thanks to:** gilles who created microStudio and created microScript!
 
+> **This is the 1.0 Handbook, checked on 10/26/2026.** Every example in it runs on today's TiberScript engine in microStudio, and the full example at the end is played to its ending by microStudio's own tests. 1.0 is the core of the language: the 1.1 Handbook has everything 1.0 has and more, and the 1.2 Handbook is the newest version, the one microStudio runs. A program written for 1.0 still runs there as it is. To be sure it is read by the 1.0 rules, write `Tiber.version = "1.0"` on the first line of its file, or put the code between `tiberscript 1.0` and `end`; the 1.2 Handbook has both in its Section 1. The 1.0 Tutorial teaches the same things one lesson at a time.
+
 ---
 
-#### TiberScript is a high-level game scripting language designed to eliminate the "spaghetti code" of traditional game development. It prioritizes **scoped logic** (blocks that clean up after themselves) and **readable intent** (code that reads like a sentence).
+#### TiberScript is a high level game scripting language designed to eliminate the "spaghetti code" of traditional game development. It prioritizes **scoped logic** (blocks that clean up after themselves) and **readable intent** (code that reads like a sentence).
 
 ---
 
@@ -18,7 +20,7 @@
 
 ### Functions & Definitions
 
-TiberScript uses an assignment-based syntax for clarity. Functions are treated as data.
+TiberScript uses an assignment based syntax for clarity. Functions are treated as data.
 
 ```tiberscript
 // Defining a function
@@ -74,7 +76,7 @@ end
 
 ### Data Structures (`data`)
 
-Use the `data` block for key-value collections. Unlike JSON, this supports comments and cleaner formatting.
+Use the `data` block for key and value collections. Unlike JSON, this supports comments and cleaner formatting.
 
 ```tiberscript
 config = data
@@ -92,11 +94,17 @@ Global helpers exist to make math feel natural.
 
 * **`random(n)`**: Returns a random integer between 1 and `n`.
 * **`clamp(val, min, max)`**: Keeps a number inside a range.
-* **`wave(time, speed)`**: Returns a sine wave value (great for floating animations).
+* **`wave(time, amplitude)`**: Returns a sine wave value that swings between `-amplitude` and `amplitude` as `time` counts up (great for floating animations). Pass a frame counter as the time.
+
+```tiberscript
+roll = random(6)
+hp = clamp(hp, 0, 100)
+floatY = wave(frameCount, 4)
+```
 
 ---
 
-## 2. Object-Oriented Programming (Archetypes)
+## 2. Object Oriented Programming (Archetypes)
 
 The heart of TiberScript is the **Archetype**. This is your blueprint (class).
 
@@ -132,11 +140,13 @@ end
 
 ```
 
-> **Developer Note:** When you use `extends`, the child automatically gains all `mark()` tags from the parent!
+> **Developer Note:** When you use `extends`, the child automatically gains all `mark()` tags from the parent! The parent's `init()` is what marks them, so a child with its own `init()` calls `super.init()`, as `boss` does.
 
 ---
 
 ## 3. The Game Flow (State Management)
+
+A game has up to two functions that microStudio calls for you: **`init()`** runs once, at the start, and **`update()`** runs 60 times a second.
 
 TiberScript manages the game loop via **States**. Never use messy variables (`if state == "menu"`) to track where you are.
 
@@ -150,7 +160,7 @@ update() = function
   end
 
   during "game" do
-    player.update()
+    player.x += 2
   end
 end
 
@@ -165,9 +175,11 @@ TiberScript distinguishes between a **Tap** (Intent) and a **Hold** (Action).
 * **`.hit`**: Returns `true` *once* when pressed (Triggers: Jumping, Shooting, UI).
 * **`.held`**: Returns `true` *continuously* while down (Movement, Charging).
 
+Keys are named like `"space"`, `"enter"`, `"arrowLeft"`, `"arrowRight"`, `"arrowUp"`, `"arrowDown"`, or a letter like `"s"`.
+
 ```tiberscript
 if key("arrowRight").held then walk() end // Continuous
-if key("space").hit then jump() end // One-time action
+if key("space").hit then jump() end // One time action
 
 ```
 
@@ -179,9 +191,13 @@ TiberScript uses **Scoped Blocks** to apply effects. This prevents bugs where ef
 
 ### Graphics (`screen`)
 
-* **`screen.sprite(id, x, y)`**: Draw an image resource.
-* **`view x=..., y=... do`**: Creates a camera offset for everything inside.
-* **`alter ... do`**: Applies transforms (scale, rotation, opacity, color).
+The middle of the screen is `0, 0`. `x` grows to the right and `y` grows **up**. The screen is 200 units tall, and about 355 wide on a widescreen window.
+
+* **`screen.clear(color)`**: Fill the whole screen with one color. Do it at the start of every frame.
+* **`screen.sprite(id, x, y)`**: Draw an image resource: a sprite from the project's Sprites tab, like the `icon` every project has.
+* **`screen.text(text, x, y, color)`**: Draw text. Leave out `x` and `y` for the middle of the screen, and the color for white.
+* **`view x=..., y=... do`**: Creates a camera offset for everything inside. The point `x, y` is drawn in the middle of the screen. **`view world do`** draws at world positions, with no offset.
+* **`alter ... do`**: Applies transforms (scale, rotation, opacity, color). Rotation is in degrees. A color paints shapes and text in that color and tints sprites.
 
 ```tiberscript
 // Draw a ghost that is 50% transparent and red
@@ -197,7 +213,9 @@ end
 * **`tune("id")`**: Play looping music.
 * **`silence("all")`**: Stop sounds.
 
-You can use `alter` for audio too!
+The ids are the names in the project's Sounds and Music tabs.
+
+You can use `alter` for audio too! Volume goes from 0 to 1, and a pitch of 1 is normal: 0.2 is very low.
 
 ```tiberscript
 alter volume=0.5, pitch=0.2 do
@@ -213,11 +231,13 @@ end
 Do not check for objects manually. Use **Tags**.
 
 1. **`this.mark("tag")`**: Give an object a label in its `init`.
-2. **`collide("tag")`**: Checks for collision. Returns the **Object** hit, or `null`.
-3. **`near("tag", dist)`**: Checks for proximity.
+2. **`collide("tag")`**: Checks for collision. Returns the **Object** hit, or `null`. Inside an archetype's method it checks `this`; anywhere else it checks `player`.
+3. **`near("tag", dist)`**: Checks for proximity. Returns the nearest object with that tag within `dist`, or `null`.
+
+Objects are 16 by 16 unless they have a `w` and an `h`.
 
 ```tiberscript
-// Inside Player Update
+// Inside the player's update() method
 coin = collide("currency") // Checks for any object marked "currency"
 
 if coin then
@@ -235,6 +255,7 @@ end
 File I/O is handled safely to prevent corruption.
 
 * **`access "slot" as var do ... end`**: Opens a save slot. It **automatically saves** when the block closes.
+* **`exists("slot")`**: `true` once that slot has been saved.
 
 ```tiberscript
 // Saving
@@ -256,7 +277,7 @@ end
 
 ## 8. Advanced Tools!
 
-To make TiberScript truly powerful, I have added built-in support for Timers and Particles.
+To make TiberScript truly powerful, I have added built in support for Timers and Particles.
 
 ### Timers (`schedule`)
 
@@ -272,11 +293,26 @@ end
 
 ### Particles (`emit`)
 
-A built-in particle emitter system.
+A built in particle emitter system.
 
 ```tiberscript
 // Spawns 10 "fire" particles at x, y
 emit("fire", x, y, 10)
+
+```
+
+Particle kinds include `fire`, `smoke`, `spark`, `blood`, `ice`, `magic` and `coin`. Any other name gives white sparks.
+
+### Error Handling (`attempt`)
+
+Wrap risky logic in `attempt`. If anything goes wrong inside, the `recover` block runs instead of stopping the game. Here there is no level to read a name from, so `recover` runs.
+
+```tiberscript
+attempt
+  levelName = levels[current].name
+recover
+  levelName = "Unknown"
+end
 
 ```
 
@@ -315,28 +351,46 @@ hero = archetype
   init(name) = function
     this.name = name
     this.hp = config.startHp
+    this.x = 0
+    this.y = 0
+    this.hurtTimer = 0
     this.mark("player") // Physics Tag
   end
 
   hurt(amount) = function
     this.hp = this.hp - amount
+    this.hurtTimer = 30
     sfx("ouch")
     
     // Advanced: Emit particles when hit
-    emit("blood_particles", this.x, this.y, 5)
-    
-    // Visual feedback (Visuals + Scoping)
-    alter color="red", scale=1.2 do
-      this.draw()
+    emit("blood", this.x, this.y, 5)
+  end
+
+  draw() = function
+    if this.hurtTimer > 0 then
+      // Visual feedback (Visuals + Scoping)
+      alter color="red", scale=1.2 do
+        screen.sprite("icon", this.x, this.y)
+      end
+    else
+      screen.sprite("icon", this.x, this.y)
     end
   end
 end
 
 enemy = archetype
   init() = function
-    this.x = random(300)
-    this.y = random(300)
+    // somewhere left or right of the hero, never on top of it
+    this.x = 40 + random(110)
+    if random(2) == 1 then this.x = -this.x end
+    this.y = random(160) - 80
     this.mark("hazard")
+  end
+
+  draw() = function
+    alter color="red", rotation=45 do
+      screen.sprite("icon", this.x, this.y)
+    end
   end
 end
 
@@ -361,7 +415,11 @@ update() = function
     screen.clear("#222")
     
     // Input Handling
-    if key("arrowRight").held then player.x += 5 end
+    if key("arrowRight").held then player.x += 2 end
+    if key("arrowLeft").held then player.x -= 2 end
+    if key("arrowUp").held then player.y += 2 end
+    if key("arrowDown").held then player.y -= 2 end
+    if player.hurtTimer > 0 then player.hurtTimer -= 1 end
     
     if key("s").hit then
       access "save1" as disk do
@@ -372,15 +430,15 @@ update() = function
     end
 
     // Physics
-    if collide("hazard") then
+    if collide("hazard") and player.hurtTimer == 0 then
        player.hurt(10)
     end
     
     // Logic
     if player.hp > 50 then
-      screen.text("Health Good", 10, 10)
+      screen.text("Health Good", 0, 85)
     elsetry player.hp > 0 then
-      screen.text("Health Low!", 10, 10, "red")
+      screen.text("Health Low!", 0, 85, "red")
     else
       transit("gameOver")
     end
@@ -398,9 +456,12 @@ update() = function
   during "gameOver" do
     silence("all")
     screen.clear("black")
-    screen.text("Game Over", 150, 150)
+    screen.text("Game Over", 0, 0, "red")
+    screen.text("Press SPACE to play again", 0, -30)
+    if key("space").hit then init() end
   end
 end
 
 ```
----
+
+Move with the arrow keys, save with S. The red enemies hurt, and after a hurt the hero flashes red for half a second before the next one can land.
