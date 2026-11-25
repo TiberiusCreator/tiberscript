@@ -8,7 +8,7 @@
 
 **Special Thanks to:** gilles who created microStudio and created microScript!
 
-> **This is the 1.2 Handbook, checked on 10/28/2026.** It is the whole of TiberScript 1.2, exactly as microStudio runs it for every project set to TiberScript. Every code block in it is run on the engine by microStudio's own tests. It builds on the 1.1 Handbook, and the 1.2 Tutorial teaches the same things lesson by lesson. The 1.0 and 1.1 Handbooks stay true for what they cover: a program written for either runs here as it is.
+> **This is the 1.2 Handbook, checked on 11/24/2026.** It is the whole of TiberScript 1.2, exactly as microStudio runs it for every project set to TiberScript. Every code block in it is run on the engine by microStudio's own tests. It builds on the 1.1 Handbook, and the 1.2 Tutorial teaches the same things lesson by lesson. The 1.0 and 1.1 Handbooks stay true for what they cover: a program written for either runs here as it is.
 
 ---
 
@@ -26,25 +26,30 @@ And then there is the one thing no other game language has.
   - **HTML, Powered by the Whole Forge.** `html shop ... end` is a page written in the game's own file: HTML, CSS and JavaScript as the web writes them, with `$(gold)` for a value the page always shows as it is now, `do="buy(item)"` for the game's own code on a click, `bind="volume"` for an input kept equal to a value both ways, `show=` for a part shown only while it is true, and `each="item in bag"` for one part for every item of a list. The Forge compiles all of it with the game, and only what changed reaches the page.
   - **Change the Past.** The biggest of the six. `retro seconds(2) do ... end` makes a change two seconds ago and plays the game forward again from there with the same inputs, so the present becomes the one that change would have made. Save your code while the game runs, or move a tunable's slider, and all the time kept is played again with it: the run you are in becomes the run where the bug never happened. `time.undoChange()` puts back what had happened, and `time.showOldPast(true)` draws it faintly over the new present.
 - **Light and effects.** Lights, spotlights, sunlight and real shadows, soft or sharp, from walls, tile maps, round things, objects and whole swarms, a glow around every light, glows that light nothing, a light on every member of a swarm, and a finish on the whole frame (bloom, scanlines, a vignette, color fringes, big pixels, film grain, or an old television, all at once). A light is drawn like everything else, so a rewound, replayed or forecast game is lit right with no work at all. See Section 23.
-- **Mirrors and water.** `lighting.mirror()` is a mirror that light does not pass and that throws every light back, shadows and all, so a lantern in front of one lights the room twice and a spotlight comes back as a beam. `screen.mirror()` is a rectangle that shows the picture beside it turned over, and `screen.water()` is the same with ripples, a tint and a fade: a lake, a wet floor, a pane of glass, each in one line. See Section 23.13.
+- **Mirrors and water.** `lighting.mirror()` is a mirror that light does not pass and that throws every light back, shadows and all, so a lantern in front of one lights the room twice and a spotlight comes back as a beam. `screen.mirror()` is a rectangle that shows the picture beside it turned over, `screen.water()` is the same with ripples, a tint and a fade, and `screen.reflect()` is a mirror along any line, turned any way, that shows the mirror picture of what stands in front of it: a lake, a wet floor, a pane of glass, a mirror on a stand, each in one line. See Section 23.13.
+- **Lenses and shockwaves for every browser.** `screen.lens()` bends what is drawn round a point, pulling it in like a black hole or swelling it like a magnifying glass, and `screen.shockwave()` is a ring that pushes the picture outward and lights it, for an explosion or a burst of power. Both copy the picture onto itself, so they cost every browser about as much as a rectangle does. See 23.14.
+- **An `each` that runs as WebAssembly without being asked.** A swarm's `each` whose block works on the member's numbers alone is written by the Forge as WebAssembly too, and runs on the swarm's own columns where they are, with nothing copied in or out: on 100,000 members about a twelfth of the time the same loop takes as ordinary code. Anything the WebAssembly cannot take as it is runs the loop as written, so the answer never changes. See 19.21.
+- **Numbers back from the graphics chip.** `screen.compute(shader, wide, high)` works a shader out at every point of a grid and hands what it returned back to the game as numbers: a whole field of work done at once on the chip. See 19.37.
+- **The same feel at 60, 120 and 240 updates a second.** A press counted a little early, a cooldown, a held key or button that repeats, a tap, a long press and a double tap are all measured in sixtieths of a second, so a game that runs at any number of updates a second plays the same. See 21.7.
 - **Physics that rewinds.** `physics.add(crate, "box", 16, 16)` and a crate falls, stacks, slides and is pushed; balls bounce and roll. It keeps nothing of its own, so a rewind, a forecast, a replay and a rollback move every body exactly, and every machine gets the same numbers. See Section 24.
 - **Filters, and swarms the graphics chip moves.** `effects.filter(shader)` stacks your own shaders on the finished frame, in order, each with its strength, and `swarm.moveOnChip(shader)` has the graphics chip move every member of a swarm at once. See 23.11 and Section 25.
 - **A whole game saved in one line.** `save.game()` writes down everything the game is right now, and `save.loadGame()` puts all of it back. See Section 15.
 - **Pictures and clips of the best moments.** `capture.moment("the boss falls")` keeps a picture of the frame, and a clip of the seconds around it; with `capture.auto` on, the engine keeps its own: a sprite seen for the first time, a sudden burst of action, an action the game names. Off unless a game or its player asks. See Section 26.
 - **Time at any speed.** `time.rewind(0.5)` goes back at half speed and `time.rewind(0.25)` at a quarter, `time.forward()` goes forward again over what was just gone back over, `time.ago()` is a picture of the world a while ago, and `time.speed` slows the whole game down or hurries it up, drawn smoothly in between: slow motion with `time.slow()`, a hit that stops the world for a moment with `time.freeze()`, one tick at a time with `time.step()`. See Section 19, Part One.
-- **Controllers that answer as they do on their own console.** Xbox, PlayStation (the DualSense and DualSense Edge too), Nintendo Switch (the Pro Controller and Joy Con, two Joy Cons as one controller), Steam, 8BitDo, Logitech, PowerA, HORI, GameSir and any other controller, plugged in or over Bluetooth. Where microStudio runs, Nintendo's, Sony's and Microsoft's controllers are read from their own reports the moment each one arrives, at the controller's own pace and not at the pace a browser passes changes on, so a press reaches the game with no wait added. A light touch answers, the shortest tap is never missed, each stick uses the calibration its own controller carries, and the motion sensor (`pad.motion`), the battery (`pad.battery`), rumble on the controller's own motors and the light that shows which player it is all work. Every player keeps their number when a controller is unplugged, every brand's button names work, button prompts are drawn to match the controller in the player's hands, `pad.pace` says how often a controller is read, and a setup screen that any game opens with F2 teaches the engine any controller a browser does not know. See Section 7.
+- **Controllers that answer as they do on their own console.** Xbox, PlayStation (the DualSense and DualSense Edge too), Nintendo Switch (the Pro Controller and Joy Con, two Joy Cons as one controller), Steam, 8BitDo, Logitech, HORI, GameSir and any other controller, plugged in or over Bluetooth. Where microStudio runs, every controller is read from its own reports the moment each one arrives (Nintendo's, the Switch 2's included, Sony's, Microsoft's, Valve's and any other gamepad), at the controller's own pace and not at the pace a browser passes changes on, so a press reaches the game with no wait added. A light touch answers, the shortest tap is never missed, each stick uses the calibration its own controller carries, and the motion sensor (`pad.motion`), the battery (`pad.battery`), rumble on the controller's own motors and the light that shows which player it is all work. Every player keeps their number when a controller is unplugged, every brand's button names work, button prompts are drawn to match the controller in the player's hands, `pad.pace` says how often a controller is read, and a game can open a setup screen (`controllers.setup()`) for a controller nobody has described. See Section 7.
 - **From one screen to the next.** `transition.fade(0.4) do ... end` covers the screen, runs the block while nobody can see, and uncovers it: a title that becomes a level, a door, a death and a new try. `transition.wipe()`, `transition.iris()` and `transition.blinds()` do the same with a curtain, a closing circle and strips. See Section 5.
 - **Colors that can be worked with.** `colors.mix()`, `colors.lighten()`, `colors.darken()`, `colors.fade()`, `colors.rgb()` and `colors.hsl()` make a color from another: a health bar that goes from red to green, a button a shade lighter under the pointer, a whole palette from one color. See Section 2.
 - **Springs.** `springTo(button, "size", 1)` takes a number to its target with a bounce, the way a pressed button, a landing hero or a panel sliding in should move. See Section 2.
 - **Values on the screen while you work.** `watch("speed", hero.vx)` shows a value in a corner of the running game, every tick, with no console to scroll. See Section 12.
 - **Buttons that know how long they are held.** `pad.repeat("down")` keeps a menu moving while a direction is held, `pad.tapped()`, `pad.longPress()` and `pad.doubleTap()` tell a tap from a hold, and `pad.heldFor()` counts the ticks. A key and an action answer the same way (`key("arrowDown").repeat`, `action("down").repeat`), and so do the engine's own menus. See Section 7.
+- **Sixteen players, and worn sticks that keep still.** Up to sixteen controllers at once each get a player of their own, a stick that rests off its middle and jumps a little at every report reads 0 after about three seconds untouched, and the Switch 2 GameCube controller's L and R say how far down they are.
 - **How far down counts, set by the game or by the player.** `controllers.threshold` is how far a button or a trigger goes down before it counts, `pad.setThreshold("rt", 0.8)` sets one button alone, `controllers.curve` makes the middle of a stick finer, `pad.raw("leftX")` reads a stick as it is, and each stick is four directions of its own (`"rsUp"`, `"lsLeft"`). Each setting takes a word (`controllers.threshold = "light"`, `controllers.deadzone = "wide"`), `"auto"` lets the engine measure the controller in the player's hands, `controllers.feel = "fast"` (or `"normal"`, `"precise"`, `"relaxed"`) sets them all at once, and `pad.drift` shows what was measured. See Section 7.
 - **Every button a controller has.** Past the face buttons, the shoulders, the triggers and the sticks: the extra front button each maker puts somewhere (a touchpad pressed in, Share, Capture, Star, a quick access button), a finger resting on a touchpad and where it is, a microphone button, a chat button, up to four back buttons, the small rail buttons of a single Joy Con, and the C buttons of a controller made for the Nintendo 64, read as a right stick. Each has one name a game uses on every controller, and the names each maker prints answer too. `pad.has("paddle1")` says whether the controller in the player's hands has that button, and `pad.label()` says what it is called there. See Section 7.
-- **A settings screen in every game.** F4, or START and SELECT held together, opens one screen the engine draws: pictures a second, picture size, detail, shaders, shake and flash, rumble, how hard a button is pressed, where a stick rests and how it feels, and controller setup. The game waits behind it, what the player chose is kept, and a game's own menu reaches the same lines with `Tiber.settings`. See Section 21.
+- **A settings screen and a performance monitor, as libraries.** Two libraries come with TiberScript 1.2, added from Import Libraries like the others, and no key opens either one until the game picks it, so neither ever takes a key the game already uses. **Settings**, the library recommended for every TiberScript 1.2 game and listed first, is the game's settings screen and its pause: pictures a second, picture size, detail, shaders, shake and flash, how loud the music and the sounds play, a new key for each action, rumble, how hard a button is pressed, where a stick rests and how it feels, and a Controller Check that goes through a controller step by step. **PerfMonitor** shows the frame rate the screen really shows, and it is the same library in all twelve languages. The game waits behind the settings screen, what the player chose is kept, and a game's own menu reaches the same lines with `Tiber.settings`. A game can hold itself behind a screen of its own the same way, with `Tiber.hold()`. See Section 21.
 - **Less motion for a player who asks.** `Tiber.motion` scales every shake and every flash, down to none, and `Tiber.prefersLessMotion` says what the player's own system asks for. See Section 13.
 - **TiberScript 1.0 and 1.1, inside 1.2.** `tiberscript 1.1 ... end` reads what is inside it by the 1.1 rules, `tiberscript 1.0 ... end` by the 1.0 rules, and `Tiber.version = "1.1"` on a line of its own does the same for a whole file. Old code is kept exactly as it was written, next to new code, in one game. See Section 1.
 - **More say over the Forge.** `Tiber.forge.profile` counts and times every call and `Tiber.forge.hot()` names the functions that took the most, `Tiber.forge.cache` and `Tiber.forge.clearCache()` rule the compiled code the browser keeps, and `wasm.memory` hands the game's own fast memory to a WebAssembly module made elsewhere, so it works on the game's buffers where they are. See Section 19, Part Three.
-- **60, 120 or 240 frames a second, and up to 240 updates, on their own.** `Tiber.frameRate` draws in between updates on a fast screen, `Tiber.renderScale` keeps older computers at full speed, the performance monitor (F3) has a switch for pictures a second and one for updates a second (GAME, 60, 120, 240 or AUTO), a game written with `Tiber.tickRate = "auto"` runs 120 real updates a second by itself on a 120 Hz screen with room to spare, and 240 on a 240 Hz one, and the updates are locked to the screen's refresh so motion never stutters. See Section 21.
+- **60, 120 or 240 frames a second, and up to 240 updates, on their own.** `Tiber.frameRate` draws in between updates on a fast screen, `Tiber.renderScale` keeps older computers at full speed, the performance monitor has a switch for pictures a second and one for updates a second (GAME, 60, 120, 240 or AUTO), pictures a second past what the screen shows unlock the frame rate, a game written with `Tiber.tickRate = "auto"` runs 120 real updates a second by itself on a 120 Hz screen with room to spare, and 240 on a 240 Hz one, and the updates are locked to the screen's refresh so motion never stutters. See Section 21.
 - **HTML pages over the game.** `html.show("shop")` puts one of the project's own web pages over the game, `html.receive()` reads what the player chose there and `html.set()` fills it in, the same in every language, and `html.page()` makes a page from a text, so a `javascript` block can hold a whole page, HTML, CSS and its own script. See Section 9.
 - **Built in platform SDKs.** `platform.unlock()`, stats, leaderboards, cloud saves, the player's name and presence: kept on the player's computer in a browser, sent to Steam or Epic Online Services in a desktop export, and ready for a console's own SDK. See Section 22.
 - **A game in another language, in one line.** `Tiber.translate = "es"`, or `Tiber.translate("japanese")`, draws every text of the game in that language, in the same place, color and width, with its numbers kept as numbers. The words come from the game's own translations, from the ones the editor kept in the project, or from the browser's own translator where it has one. See Section 2.
@@ -90,6 +95,7 @@ And then there is the one thing no other game language has.
 - **Whole object saves.** Save and restore an entire archetype instance in one call.
 - **A live debug overlay.** See every trigger fire, every tag on the object under your cursor and where each frame's time went, and scrub back through time.
 - **Tile maps with collision.** Stand on tiles, stop at walls, jump up through ledges, in one call.
+- **Maps that build a world.** Tilesets painted square by square in the map editor, markers that place foes, doors and the start where they are painted (`level.find()`), a world of rooms on one grid with doorways that line up, and the project's own JSON, CSV, text and Markdown files read while the game runs. See Section 11.
 - **Noise and pathfinding.** Smooth randomness for worlds, and a shortest route around them.
 
 All 1.1 scripts run unchanged, with one deliberate exception, explained in Section 1: a `for` loop's counter now belongs to its loop. Nothing above replaces anything. It all sits on top.
@@ -1216,9 +1222,10 @@ end
 A Mac, a Windows laptop, a Chromebook, a Linux desktop, an iPad with a keyboard: each lays out its keys a little differently, and the engine smooths that over for every game, in every language of the editor.
 
 - **The shortcut key.** `key("primary")` is the key a shortcut uses on the computer the game is played on: Command on a Mac, an iPhone and an iPad, Control everywhere else. `key("command")` (or `"cmd"`, `"meta"`) is Command or the Windows key, and `key("option")` is Option, the same key as `"alt"`.
-- **F keys where the system takes them.** A Mac gives most F keys to the system unless fn is held, and a Chromebook's top row runs the browser. On every computer, Control, Shift and a number key together is that F key for the game: Control Shift 2 is F2, Control Shift 0 is F10. The engine's own keys work the same way: Control Shift 3 opens the developer overlay like F3, Control Shift 4 the settings screen like F4.
+- **F keys where the system takes them.** A Mac gives most F keys to the system unless fn is held, and a Chromebook's top row runs the browser. On every computer, Control, Shift and a number key together is that F key for the game: Control Shift 2 is F2, Control Shift 0 is F10.
 - **No key stuck down.** When the page loses the keyboard (another window, another tab, a shortcut of the system), every key reads as let go, and on a Mac every key held with Command is let go when Command is, since a Mac does not say so on its own.
-- **What kind of computer it is.** `system.platform` is `"mac"`, `"windows"`, `"chromeos"`, `"linux"`, `"ios"`, `"android"` or `"other"`, so a game can name its keys the way that keyboard prints them. When the engine itself asks for a key, it does this already: on a Mac or a Chromebook it says "F3 (or Control Shift 3)".
+- **What kind of computer it is.** `system.platform` is `"mac"`, `"windows"`, `"chromeos"`, `"linux"`, `"ios"`, `"android"` or `"other"`, so a game can name its keys the way that keyboard prints them. When the engine itself names an F key a game chose, it does this already: on a Mac or a Chromebook it says "F2 (or Control Shift 2)".
+- **Whether the game is seen.** `system.visible` is 1 while the page is shown and 0 on the first update after it was hidden (another tab, a window put away), since a hidden page gets no updates; `system.focused` is 1 while it also has the keyboard. A pause screen opens on a 0 (the Settings library does, with `Settings.pauseWhenHidden`, 21.11).
 
 ### The Mouse: the Wheel, and the Shortest Click
 
@@ -1226,17 +1233,21 @@ A Mac, a Windows laptop, a Chromebook, a Linux desktop, an iPad with a keyboard:
 init() = function
   listTop = 0
   clicks = 0
+  releases = 0
 end
 
 update() = function
   if mouse.wheel != 0 then listTop += mouse.wheel * 20 end
   if mouse.hit then clicks += 1 end
+  if mouse.released then releases += 1 end
 end
 ```
 
 `mouse.wheel` is how the wheel turned since the last update: `1` turned down (toward the user), `-1` turned up, `0` not at all, the same as every other language of microStudio reads it. A list, a map or a page of stats scrolls with it.
 
 `mouse.hit` is never missed. A tap on a trackpad, or a quick tap on a phone, can go down and come up again between two updates of the game; that click still counts, once, on the next update, as a click held down longer does. The same is true in every language: microStudio's own `mouse.press` and `touch.press` count it too.
+
+`mouse.released` is the other side of a click: `true` on the update a button came up, so a game can act when a click ends, the way a button on the screen does. The Gui library's buttons click on it.
 
 ### Controllers
 
@@ -1248,9 +1259,11 @@ update() = function
 end
 ```
 
-Every controller a browser can see works: Xbox (360, One, Series, Elite and Adaptive), PlayStation (DualShock 3, DualShock 4, DualSense and DualSense Edge), Nintendo Switch (the Pro Controller, Joy Con, the Switch Online controllers, the GameCube controller and its adapter), the Steam Controller, the Steam Deck and Steam's own virtual controller, 8BitDo (Pro 2, Ultimate, SN30 Pro, M30, Lite, Zero and the rest), Logitech (F310, F510, F710), PowerA, PDP, HORI, Razer, SteelSeries, Mad Catz, GameSir, Nacon, Thrustmaster, Google Stadia, Amazon Luna, NVIDIA Shield, and any other USB or Bluetooth controller. A cable or Bluetooth makes no difference to your game: it reads them the same way.
+Every controller a browser can see works: Xbox (360, One, Series, Elite and Adaptive), PlayStation (DualShock 3, DualShock 4, DualSense and DualSense Edge), Nintendo Switch (the Pro Controller, Joy Con, the Switch Online controllers, the GameCube controller and its adapter), the Steam Controller, the Steam Deck and Steam's own virtual controller, 8BitDo (Pro 2, Ultimate, SN30 Pro, M30, Lite, Zero and the rest), Logitech (F310, F510, F710), PDP, HORI, Razer, SteelSeries, Mad Catz, GameSir, Nacon, Thrustmaster, Google Stadia, Amazon Luna, NVIDIA Shield, and any other USB or Bluetooth controller. A cable or Bluetooth makes no difference to your game: it reads them the same way.
 
-`gamepad(n)` is player n's controller, counted from 0, in the order the controllers first pressed a button, up to eight of them. A browser only shows a controller to a page after one of its buttons has been pressed, so a player's first press is what makes their controller appear. A controller that is unplugged, or whose battery runs out, keeps its player number: plugged back in, it is the same player again, even when the browser now lists it somewhere else.
+`gamepad(n)` is player n's controller, counted from 0, in the order the controllers first pressed a button, up to sixteen of them. A browser only shows a controller to a page after one of its buttons has been pressed, so a player's first press is what makes their controller appear. A controller that is unplugged, or whose battery runs out, keeps its player number: plugged back in, it is the same player again, even when the browser now lists it somewhere else.
+
+One controller is always one player. Some browsers list a controller twice, once by its own numbers and once through the computer's system, and TiberScript counts it once. Some controllers also say they are another one: an 8BitDo in its PS4 mode says it is a DualShock 4. It plays as one, and when TiberScript reads it directly (below) its `.name` is the 8BitDo it is.
 
 **Buttons by where they are.** Each brand prints different letters on its buttons, and Nintendo puts A where Xbox puts B. So the names that always work are where a button is. A game written for `"south"` jumps with A on an Xbox controller, Cross on a PlayStation one and B on a Switch Pro Controller: the bottom button on all three.
 
@@ -1276,9 +1289,9 @@ Each brand's own names work too. `"a"`, `"b"`, `"x"` and `"y"` are the Xbox lett
 
 **Reading it.** `.held(name)` is a button held down, `.hit(name)` one pressed on this tick and `.released(name)` one let go on this tick, the same pattern `key()` has. `.amount(name)` is how far, from 0 to 1, for a trigger pulled halfway. `.axis("leftX")`, `"leftY"`, `"rightX"` and `"rightY"` go from -1 to 1, with up positive as everywhere in TiberScript, and `"lt"` and `"rt"` from 0 to 1. `.angle("left")` is the direction a stick points, in degrees (0 is right, 90 is up), or `null` while it rests. `.anyHit()` is the first button pressed on this tick, by name, or `null`: a menu that rebinds a button is one line, `bind("jump", pad.button(pad.anyHit()))`.
 
-**Sticks that drift.** An old stick rarely rests at exactly the middle, and a character that creeps along on its own is the first thing a player notices. A stick reads 0 until it moves past its **deadzone**, 0.15 of the way out, and past it the reading is scaled to start from 0 again, so walking slowly still works. `pad.deadzone = 0.25` changes it for one controller, `controllers.deadzone` for every controller.
+**Sticks that drift.** An old stick rarely rests at exactly the middle, and a character that creeps along on its own is the first thing a player notices. A stick reads 0 until it moves past its **deadzone**, 0.15 of the way out, and past it the reading is scaled to start from 0 again, so walking slowly still works. `pad.deadzone = 0.25` changes it for one controller, `controllers.deadzone` for every controller. A worn stick that rests well off its middle, and wanders there, is read from where it really rests: once a controller has lain untouched for about three seconds (no button held, both sticks near where they have been resting, a stick that jumps a little at every report included), the engine learns each stick's resting place and how far it wanders, reads the stick from that place, and widens its deadzone to cover the wandering. A stick that drifted by itself then reads 0, and still reaches the edge every way. A stick that rests within a twentieth of its middle is read as it always was.
 
-**A light touch.** A button counts as held from a fifth of the way down (0.2), and a button the controller itself reports as pressed always counts, however lightly it reports it. Once held, it stays held until it is nearly let go (0.12), so a finger resting half way never flickers between the two. A trigger answers `.held("rt")` from a light squeeze, and `.amount("rt")` still says exactly how far it is pulled. A stick counts as `"left"`, `"right"`, `"up"` or `"down"` from a fifth of the way out past its deadzone, and lets go at 0.12 the same way. microStudio's own `gamepad` object (`gamepad.LEFT`, `gamepad.UP`) answers from 0.4 of the way, where it used to wait for halfway. A controller that felt stiff, that had to be pushed hard before anything happened, now answers the way a console does.
+**A light touch.** A button counts as held from a fifth of the way down (0.2), a trigger from an eighth of its pull (0.12, as on an Xbox, so a pull answers before it is half done), and a button the controller itself reports as pressed always counts, however lightly it reports it. Once held, it stays held until it is nearly let go (0.12, and 0.07 for a trigger), so a finger resting half way never flickers between the two. A trigger answers `.held("rt")` from a light squeeze, and `.amount("rt")` still says exactly how far it is pulled. A stick counts as `"left"`, `"right"`, `"up"` or `"down"` from a fifth of the way out past its deadzone, and lets go at 0.12 the same way. microStudio's own `gamepad` object (`gamepad.LEFT`, `gamepad.UP`) answers from 0.4 of the way, where it used to wait for halfway. A controller that felt stiff, that had to be pushed hard before anything happened, now answers the way a console does.
 
 **As quick as a key.** A browser tells a page about a key the moment it goes down. It tells a page about a controller only when the page asks, and a game asks once an update, so a press could wait most of a frame to be seen, and a tap that began and ended between two updates was never seen at all. TiberScript asks again every 4 milliseconds between updates and keeps the deepest press it saw, so the next update has every tap, however short. It rests when the game does, and a recording, a replay and a rewind play the same presses with or without it.
 
@@ -1422,7 +1435,7 @@ A trigger is not a switch. It reports how far it is pulled, from 0 to 1, and so 
 
 **A stick as it is.** `pad.raw("leftX")`, `"leftY"`, `"rightX"` and `"rightY"` read a stick before its deadzone and its curve, to four places. It is what a calibration screen shows, and what tells a stick that drifts (it rests at 0.04, say) from one that does not.
 
-A player can set the threshold, the deadzone and the curve themselves, on the settings screen every game has (Section 21). What a game sets in its `init()` is where that screen starts.
+A player can set the threshold, the deadzone and the curve themselves, on the screen of the Settings library (Section 21.11). What a game sets in its `init()` is where that screen starts.
 
 ### Feel in Words, and Letting the Engine Measure
 
@@ -1463,7 +1476,7 @@ Every one of these settings takes a word as well as a number, and a misspelled w
 | `"precise"` | for aiming: a measured deadzone, a fine curve (1.5), and a stick that leans a little farther before it counts as a direction |
 | `"relaxed"` | forgives a resting thumb: a firm threshold, a wide deadzone, and a stick that must lean well over before it counts |
 
-Reading `controllers.feel` gives the word for what is set now, or `"custom"` when the settings are none of the four. The settings screen every game has (Section 21) has a CONTROLLER FEEL line with the same four words, and its BUTTON PRESS and STICK REST lines show the words above, `auto` first.
+Reading `controllers.feel` gives the word for what is set now, or `"custom"` when the settings are none of the four. The Settings library (Section 21.11) has a CONTROLLER FEEL line with the same four words, and its BUTTON PRESS and STICK REST lines show the words above, `auto` first.
 
 ### The Buttons Only Some Controllers Have
 
@@ -1523,7 +1536,7 @@ end
 
 Browsers lay out the controllers they know in the standard way above. A controller a browser does not know may come through with its buttons in another order: `.setUp` is then false. `controllers.setup(n)` opens a screen the engine draws over the game, with a picture of a controller, that asks for each button in turn (press the bottom face button, pull the left trigger, push the left stick up, and so on, 21 questions). SPACE skips a button the controller does not have, BACKSPACE goes back one, ESC cancels. What it learns is kept in storage under the controller's id, so it is set up for good, and from then on that controller reads the standard way like any other. `controllers.settingUp` is true while the screen is open (the controller's input is held back from the game meanwhile), and `controllers.forget(n)` goes back to the standard layout.
 
-A player never has to wait for a game to offer that screen. In every TiberScript game, **F2** opens it for the controller that needs it most: one the engine is only guessing at, or else the one used last. When a controller the engine has to guess at joins, a line at the top of the screen says so for a few seconds (`The USB Gamepad is new here: press F2 to set its buttons`). `controllers.setupKey = "f9"` moves it to another key, and `controllers.setupKey = null` turns the key and the engine's own lines off, for a game that has its own controls menu.
+No key opens that screen by itself, and the engine puts no line over a game about it: nearly every controller is one the engine knows, and those need no setup at all. A layout learned there is used only for a controller the engine has no layout of its own for, so a layout learned wrong never spoils a controller it knows. A game that wants a key for the screen sets one: with `controllers.setupKey = "f2"`, F2 opens it for the controller that needs it most (one the engine is only guessing at, or else the one used last), and when a controller the engine has to guess at joins, a line at the top of the screen says so for a few seconds (`The USB Gamepad is new here: press F2 to set its buttons`). `controllers.setupKey = null` is how a game starts.
 
 ### Plugged In or Wireless
 
@@ -1557,7 +1570,7 @@ Chrome and Edge lay out a Switch Pro Controller and a pair of Joy Cons the stand
 
 **Two Joy Cons, one controller.** When the browser sees a left and a right Joy Con apart, TiberScript makes them one controller, the way a Switch does with both in the grip: the left one's buttons are the D pad, minus, ZL, L and the left stick, the right one's are the face buttons, plus, ZR, R and the right stick. One `controllerConnected` event says so. `controllers.pairJoycons = false` keeps them as two controllers, for two players with one Joy Con each. A recent Mac can also combine them itself, in System Settings, and then the browser shows one controller from the start.
 
-**Joy Con 2 and the Switch 2 Pro Controller.** TiberScript knows them by name and by number, and reads them like their older brothers. They talk to a computer over Bluetooth Low Energy, which most computers and browsers do not show to a page as a controller yet: with a USB C cable the Switch 2 Pro Controller works wherever the computer sees it, and over Bluetooth it works once the computer itself lists it as a game controller.
+**Joy Con 2, the Switch 2 Pro Controller and the Switch 2 GameCube controller.** TiberScript knows them by name and by number, and reads them like their older brothers. They talk to a computer over Bluetooth Low Energy in Nintendo's own way, which no system shows to a page as a controller. Where microStudio runs on a Mac, its bridge reads them for every browser: hold the small sync button on the controller's side until its lights run, and it joins, with nothing to pair. The Mac asks once whether microStudio's controller helper may use Bluetooth. Two Joy Con 2 are one controller like the older ones, the C button is `chat` (or `c`), and the two buttons on the back of the Switch 2 Pro Controller are `paddle1` and `paddle2`. Their sticks arrive without a calibration: each way of a stick learns its own reach the first time it is pushed to the edge. `pad.rumble()` plays the controller's own short buzz. The GameCube controller's L and R go down gradually, and `.amount("lt")` and `.amount("rt")` say how far. A Joy Con 2 that was read before comes back by itself when it wakes while the bridge is running; after it has been away from this computer, hold its sync button again. Elsewhere, with a USB C cable the Switch 2 Pro Controller works wherever the computer sees it.
 
 **Where a browser lists a controller and cannot read it.** Some systems talk to a Switch Pro Controller and to Joy Cons themselves, in a fuller way than a browser follows. The browser then lists the controller without being able to read what it sends, or does not list it at all. A Pro Controller on a cable says nothing until it is asked in its own way. TiberScript notices: `pad.silent` stays true, and after ten seconds the engine says on screen what to do. The next part is what it does about it.
 
@@ -1565,11 +1578,11 @@ Chrome and Edge lay out a Switch Pro Controller and a pair of Joy Cons the stand
 
 A controller speaks one language whatever carries it: reports of its buttons, its sticks and its triggers, many times a second. A browser reads those reports and hands a page what it understood, at a pace of its own. Some browsers pass a change on within a few thousandths of a second. Some pass changes on only a few times a second, and a player feels that as a controller that answers late, on every game, whatever the game does. And some cannot read a controller's reports at all.
 
-TiberScript reads the reports itself, the moment each one arrives, for the controllers of the three console makers and of Valve: Nintendo's (the Pro Controller, Joy Cons and the Switch Online controllers), Sony's (the DualShock 4, the DualSense and the DualSense Edge), Microsoft's (the Xbox controllers that pair over Bluetooth) and Valve's (the Steam Controller, the first one and the one of 2026, and the Steam Deck's own). A controller read this way is a controller like any other to a game: `gamepad(0)`, the same button names, the same rumble, and the player number it already had. There are two ways the reports reach the game, and the engine uses whichever is there.
+TiberScript reads the reports itself, the moment each one arrives, for the controllers of the three console makers and of Valve: Nintendo's (the Pro Controller, Joy Cons and the Switch Online controllers), Sony's (the DualShock 4, the DualSense and the DualSense Edge), Microsoft's (the Xbox controllers that pair over Bluetooth) and Valve's (the Steam Controller, the first one and the one of 2026, and the Steam Deck's own). Where microStudio's bridge is on, it reads every other controller too: a pad made for the Switch by HORI or PDP, an 8BitDo in any of its modes, a Logitech, any gamepad on a cable or over Bluetooth. Each of those says what its reports hold in a description of its own (its report descriptor), and the engine lays it out by what it knows of that maker. A controller read this way is a controller like any other to a game: `gamepad(0)`, the same button names, the same rumble, and the player number it already had. There are two ways the reports reach the game, and the engine uses whichever is there.
 
 **microStudio reads the controller.** On the computer microStudio itself runs on, the editor opens the controller and passes each report to the game as it arrives: the controller bridge. With the bridge on, every controller named above works in every browser on that computer with nothing to pick and nothing to set, the ones a browser cannot read by itself included. When microStudio starts, it prints whether the bridge is on. On a Mac it is on by itself: microStudio builds the small program it needs the first time it starts, with what a Mac already has. On another system it prints the one line that turns it on.
 
-**The browser hands the controller over.** Chrome, Edge and a game exported for the desktop can give a page the reports of a Nintendo, a Sony or a Valve controller. A browser asks the player first, once: with no controller answering yet, the setup key (F2) opens the browser's list of controllers, and the one picked there is opened by itself every time from then on. A game with a menu of its own asks for the list with `controllers.connect()`, and the browser shows it at the player's next key or click (a browser only shows it then). A game exported for the desktop asks nobody: a Nintendo controller plugged in or paired is read at once.
+**The browser hands the controller over.** Chrome, Edge and a game exported for the desktop can give a page the reports of a Nintendo, a Sony or a Valve controller. A browser asks the player first, once, in a list of controllers: a game asks for the list with `controllers.connect()`, and the browser shows it at the player's next key or click (a browser only shows it then). The one picked there is opened by itself every time from then on. A game that set `controllers.setupKey` also opens the list with that key while no controller answers yet. A game exported for the desktop asks nobody: a Nintendo controller plugged in or paired is read at once.
 
 ```tiberscript
 update() = function
@@ -1704,13 +1717,13 @@ end
 What the report shows says what to do:
 
 - **The controller is not in it at all.** The browser does not see it. Press one of its buttons (a browser shows a controller only after that), check that the computer itself lists it, and try another browser.
-- **It is there, and its player line ends with `silent so far`.** The browser lists it and hears nothing from it. Where microStudio's bridge is on, a controller of the three console makers is read directly within a moment and the line goes away by itself. In Chrome and Edge, press F2 for a Nintendo controller: the browser's list opens and the controller is read directly from then on. Where the report's last line says `direct reading: not in this browser`, play from microStudio running on the same computer, or in Chrome or Edge. For any other controller it is a mode the computer does not follow: connect it the other way, switch its mode, or use another browser. `controllers.hint` says the same in a sentence a game can show.
-- **It is there with buttons in the wrong places.** Press F2, or call `controllers.setup()`: the engine learns its layout for good.
+- **It is there, and its player line ends with `silent so far`.** The browser lists it and hears nothing from it. Where microStudio's bridge is on, a controller of the three console makers is read directly within a moment and the line goes away by itself. In Chrome and Edge, a game that calls `controllers.connect()` opens the browser's list for a Nintendo controller, and the controller is read directly from then on. Where the report's last line says `direct reading: not in this browser`, play from microStudio running on the same computer, or in Chrome or Edge. For any other controller it is a mode the computer does not follow: connect it the other way, switch its mode, or use another browser. `controllers.hint` says the same in a sentence a game can show.
+- **It is there with buttons in the wrong places.** Play from microStudio running on the same computer, where the bridge lays it out by what it knows of the maker. Or the game calls `controllers.setup()`: the engine learns its layout for good.
 - **It works, and answers late.** Look at the player's line: `read every 15 ms` is a controller read at its own pace, and a number in the hundreds is a browser passing changes on slowly. `pad.pace` is the same number for a game. Reading directly is the cure: play from microStudio running on the same computer, where the bridge reads the controller for every browser.
 
 Controllers are part of the Timeline (Section 19): what every controller held is kept with each tick, so a recording, a replay, a test that replays a run and a rewind all play a controller exactly, even on a machine with none plugged in.
 
-microStudio's own `gamepad` object still works (`gamepad.A`, `gamepad.LEFT`, `gamepad.press.A`), and it now finds a controller in any of the browser's places: it used to miss one when the browser left the first place empty, which Windows often does.
+microStudio's own `gamepad` object still works (`gamepad.A`, `gamepad.LEFT`, `gamepad.press.A`), and it now finds a controller in any of the browser's places: it used to miss one when the browser left the first place empty, which Windows often does. It also reads every controller in the same layout in every browser: A is the bottom face button on a Sony, a Nintendo or any other controller, and the D pad and the sticks read the same everywhere.
 
 ### Action Mapping
 
@@ -1821,7 +1834,7 @@ end
 
 The last number is how many frames each animation frame holds for. Switching which animation is playing does not restart the whole system from scratch. It picks up cleanly, so a character does not visibly stutter every time they stop and start moving. `player.flip = true` mirrors the sprite around its own center, which is what facing left should have meant all along.
 
-Any one frame of an animated sprite can be drawn by name: `screen.sprite("cat_run.2", x, y, 16)` draws frame 2 (frames count from 0) and holds it there. A game can then pick the frame itself, from how far a character has walked for example, and play a footstep on exactly the frames where a paw lands. A sprite can be drawn in a box of its own, with a width and a height, `screen.sprite("cat_attack", x, y, 27, 19)`, and a negative width draws it mirrored, so a sprite drawn facing right faces left too.
+Any one frame of an animated sprite can be drawn by name: `screen.sprite("hero_run.2", x, y, 16)` draws frame 2 (frames count from 0) and holds it there. A game can then pick the frame itself, from how far a character has walked for example, and play a footstep on exactly the frames where a foot lands. A sprite can be drawn in a box of its own, with a width and a height, `screen.sprite("hero_attack", x, y, 24, 16)`, and a negative width draws it mirrored, so a sprite drawn facing right faces left too.
 
 ### Camera
 
@@ -1881,6 +1894,8 @@ end
 ```
 
 Every `sfx()` and `tune()` call respects its channel's current volume automatically. No changes needed to any existing 1.1 call for this to work. `audio.has(name)` says whether the project has a sound or music track by that name, and `sfx()` of a name that does not exist now warns once, with the line, instead of silently playing nothing.
+
+A browser lets a page make sound once the player has pressed a key, clicked or touched it, and some browsers let it from the start. Until then a `tune()` waits, and starts the moment sound is allowed. An `sfx()` or an `audio.beep()` asked for before then is skipped, so it never sounds late, after the moment it belonged to; a beep with `loop` in it waits like a tune.
 
 Sounds and music made in microStudio's Sound Studio and Music Studio are ordinary project sounds, so `sfx("coin")` and `tune("theme")` play them with nothing else to set up.
 
@@ -2125,6 +2140,81 @@ end
 
 `tilemap()` wraps a project map at a place in the world. `solid()` names the tiles that block, `oneWay()` the ones you can jump up through and land on. `level.collide(obj)` moves an object out of every solid tile it went into, along the shorter way, and sets `obj.onFloor`, `obj.onWall` and `obj.onCeiling` for that tick, which is the whole of platformer collision. `level.tileAt(x, y)` reads the tile at a world position, and `level.set(x, y, tile)` changes one, so a block can break or a door can open.
 
+`level.draw()` draws the map where the tilemap put it, so the camera, the layers and the light treat it like everything else in the world. A tilemap reads its map as it is now: what `set()` changes is drawn and collided against from the next tick on.
+
+**Tilesets.** A tile does not have to be a sprite of its own. In the map editor, a sprite bigger than one tile is a tileset: each square of it is a tile you can paint, and the map keeps it as the sprite's name with the square after a colon, `"stone:3,1"` for the fourth square of the second row. `tileAt()` gives the name before the colon, so one `level.solid("stone")` makes every square of the tileset block, and a wall painted from fifty different squares, edges, corners and cracks, is still one name to the game. `level.tileIdAt(x, y)` gives the whole of it, square and all, for when the square itself means something.
+
+**Markers: placing things in the map editor.** Where a foe stands, where a door is, where the hero starts: these are easier to place by painting them into the map than by typing numbers. Make a small tileset of markers, one square for each kind of thing, paint them where things go, and let the game find them when the room is loaded:
+
+```tiberscript
+level = tilemap("level1", x = -200, y = -120)
+level.solid("ground")
+crawlers = []
+for spot in level.find("mark:2,0") do
+  crawlers.push(data(x = spot.x, y = spot.y, vx = -0.5))
+  level.set(spot.x, spot.y, null)
+end
+print(crawlers.length + " crawlers, " + level.find("mark").length + " markers left")
+```
+
+`level.find(tile)` lists every cell of the map that holds that tile: by its name, `"mark"`, every square of the tileset, or by its whole id, `"mark:2,0"`, that one square. Each one has `x` and `y`, the middle of the cell in the world, `column` and `row`, the cell itself, and `tile`, its whole id. Rubbing a marker out with `set(x, y, null)` once it has been read keeps it from being drawn; a game that comes back to the room later keeps the list it found the first time.
+
+**A world of rooms.** A game with many rooms, a metroidvania, a dungeon, a house, keeps each room as a map of its own and puts them on one grid, each at its own place in the world:
+
+```tiberscript
+const CELL_W = 24
+const CELL_H = 14
+const TILE = 16
+
+enterRoom(r) = function
+  room = r
+  level = tilemap(r.map, x = r.x * CELL_W * TILE, y = r.y * CELL_H * TILE)
+  level.solid("ground")
+  camera.bounds(level.x, level.y, level.x + level.width, level.y + level.height)
+end
+
+roomAt(rooms, wx, wy) = function
+  for r in rooms do
+    local x = r.x * CELL_W * TILE
+    local y = r.y * CELL_H * TILE
+    if wx >= x and wx < x + r.w * CELL_W * TILE and wy >= y and wy < y + r.h * CELL_H * TILE then return r end
+  end
+  return null
+end
+
+init() = function
+  rooms = [data(map = "level1", x = 0, y = 0, w = 1, h = 1)]
+  enterRoom(rooms[0])
+  print(roomAt(rooms, 40, 20).map)
+end
+```
+
+A room is a number of screens wide and high, and sits at a place on the grid counted in screens. When the hero walks out of the room he is in, the room under his feet is the next one: `roomAt()` finds it, and it is loaded with the hero kept exactly where he was, so walking from one room into the next is one step and never a jump. Doorways line up by being at the same place on the shared edge of both rooms; a game that always opens them at the same rows of a screen gets that for nothing. `camera.bounds()` set to the room keeps the camera inside it. A world map is the same list drawn small: each room a rectangle at its place, drawn once the hero has been in it. Going up through a hole in a ceiling, the hero needs a little push on entering the room above, enough to land beside the hole.
+
+**A project's own files: JSON, CSV, text and Markdown.** The list of rooms, a table of the foes and how strong each is, the words on a wall: these are data, and a project keeps them as files in its Assets tab, `assets/world.json`, `assets/foes.csv`, `assets/lore.txt` and `assets/credits.md`. `asset_manager` reads them:
+
+```tiberscript
+init() = function
+  loading = asset_manager.loadJSON("world")
+  table = asset_manager.loadCSV("foes")
+  words = asset_manager.loadText("lore")
+  credits = asset_manager.loadMarkdown("credits")
+  world = null
+end
+
+update() = function
+  if world == null and loading.ready == 1 then
+    world = loading.data
+    for line in table.text.split("\n") do
+      local cells = line.split(",")
+      print(cells[0] + " has " + string.toNumber(cells[1], 0) + " hearts")
+    end
+  end
+end
+```
+
+Each call starts reading at once and gives back a loader. Its `ready` is 1 once the file is in: then `data` holds what a JSON file says, its lists and its objects read like any TiberScript value, and `text` holds a CSV, text or Markdown file as it is written, for the game to split into lines and cells. A game reads them while its title shows, and starts once every loader is ready. `string.toNumber(text, fallback)` turns a cell into a number, or gives the fallback when it is not one. An exported game has these files with it.
+
 ---
 
 ## 12. Debugging and Error Handling
@@ -2157,7 +2247,7 @@ In main, line 20: screen.sprite(): the project has no sprite 'heroo': did you me
 In helpers, line 3: TiberScript has a built in lerp(), and a call of lerp() is always the built in's: this lerp() of the game is never called. Give it a name of its own
 ```
 
-A name set in any file counts for every file, and so does every name a `javascript` block uses or a text names (`register("boss")`, `Tiber.addCommand("tripled")`). A name read inside an `attempt` is left alone: that is code that expects a name may not be there. A name read nowhere near any name the game sets is not said either: a value that starts as `null` on purpose is a game's own business. An exported game is not checked.
+A frame of a sprite, `"hero.2"`, counts as the sprite `hero`. A name set in any file counts for every file, and so does every name a `javascript` block uses or a text names (`register("boss")`, `Tiber.addCommand("tripled")`). A name read inside an `attempt` is left alone: that is code that expects a name may not be there. A name read nowhere near any name the game sets is not said either: a value that starts as `null` on purpose is a game's own business. An exported game is not checked.
 
 The running game's own messages say more, too:
 
@@ -2228,7 +2318,7 @@ Each label has its own line, in the order the labels first appeared. A number is
 
 `watch()` costs next to nothing and changes nothing in the game, so it can sit in the busiest code. `Tiber.watch = false` hides every line without taking a single call out, which is how a game is shown to someone, and `Tiber.watch = true` brings them back. A forecast, a `whatif` and a replayed test show nothing.
 
-When to use which: `watch()` for a value that changes all the time, `print()` for something that happens once, the developer overlay (F3) for how fast the game runs, and `time.debug()` (Section 19) for going back to the tick something went wrong.
+When to use which: `watch()` for a value that changes all the time, `print()` for something that happens once, the performance monitor (its library, 21.6) for how fast the game runs, and the overlay's timeline bar (`Tiber.showDebugOverlay(true)`, 19.8) for going back to the tick something went wrong.
 
 ## 13. Extensibility: The Tiber Namespace
 
@@ -2248,9 +2338,14 @@ Tiber.setTunable(name, value)
 Tiber.forge
 Tiber.resolution
 Tiber.shaderScale
+Tiber.hold(screen)
+Tiber.release()
+Tiber.held
+Tiber.everyTick(fn)
+Tiber.bindings
 ```
 
-`Tiber.addCommand()` is unchanged from 1.1: register a brand new command, usable anywhere in your game, checked before any built in so it can even override one. `Tiber.addScript()` is unchanged from 1.1: register a named sub script, run later with `runScript()`. `Tiber.errors`, `Tiber.lastError` and `Tiber.version` are unchanged from 1.1: every logged error and warning, what went wrong in the last `attempt`, and the running version as a string, now `"1.2"`. Inside a `tiberscript 1.1 ... end` block `Tiber.version` is `"1.1"`, and on a line of its own at the top of a file it marks the whole file as that version (Section 1). `Tiber.forge` is the Forge itself, what it made of each function and the say over it (19.25), and `Tiber.resolution` and `Tiber.shaderScale` are how finely the game and its shaders are drawn (21.3 and 19.37).
+`Tiber.addCommand()` is unchanged from 1.1: register a brand new command, usable anywhere in your game, checked before any built in so it can even override one. `Tiber.addScript()` is unchanged from 1.1: register a named sub script, run later with `runScript()`. `Tiber.errors`, `Tiber.lastError` and `Tiber.version` are unchanged from 1.1: every logged error and warning, what went wrong in the last `attempt`, and the running version as a string, now `"1.2"`. Inside a `tiberscript 1.1 ... end` block `Tiber.version` is `"1.1"`, and on a line of its own at the top of a file it marks the whole file as that version (Section 1). `Tiber.forge` is the Forge itself, what it made of each function and the say over it (19.25), and `Tiber.resolution` and `Tiber.shaderScale` are how finely the game and its shaders are drawn (21.3 and 19.37). `Tiber.hold()`, `Tiber.release()`, `Tiber.held`, `Tiber.everyTick()` and `Tiber.bindings` are how a screen of a game's own, or a library's, holds the game behind it and watches for its key (21.12).
 
 `Tiber.extendArchetype()` is new in 1.2. It attaches or overrides a method on an archetype from outside the file that archetype was defined in, without editing that file at all. The archetype can be given by name, or as the archetype itself, which is the way to reach one from an imported module, `enemies.slime`. Inside the new method, `super.name()` calls the method it replaced, if there was one:
 
@@ -2399,7 +2494,7 @@ end
 save.deleteGame("quick")
 ```
 
-`save.gameInfo(slot)` tells when a game was saved: `tick`, `savedAt` (the time on the wall, in milliseconds) and `state`. Measured on a platform game of six thousand lines in the middle of a fight, with 291 objects and lists: the save is 41 KB, loading gives back the world exactly as it was saved, and three hundred frames played after the load came out the same as the three hundred played after the save, frame for frame.
+`save.gameInfo(slot)` tells when a game was saved: `tick`, `savedAt` (the time on the wall, in milliseconds) and `state`. Measured on a large game in the middle of a fight, with 291 objects and lists: the save is 41 KB, loading gives back the world exactly as it was saved, and three hundred frames played after the load came out the same as the three hundred played after the save, frame for frame.
 
 ---
 
@@ -3073,7 +3168,7 @@ Keeping ten seconds of a world, forecasting a second ahead every frame, rolling 
 - **The game starts first, the checking comes after.** On the first Run, the Forge compiles only what the first frame needs and starts the game. Reading every other function for mistakes happens a moment later, while the browser has nothing else to do, and a mistake anywhere is still reported, with its line, just as before.
 - **What a game needs most is kept together.** The functions a game calls every frame, and its top level code, are kept as one piece of JavaScript. The browser turns that piece into machine code once and keeps the machine code for as long as the tab is open, so every Run after the first one in a tab starts from machine code that is already made.
 - **Locals are locals.** A `local` and a loop's counter are JavaScript variables, and a file's own names live in one small object the whole file shares.
-- **A number stays a number.** When a `local` only ever holds numbers, the Forge knows it, and its arithmetic, its comparisons and its `%` compile to plain JavaScript arithmetic, with none of the checks a value of unknown kind needs. When such a local is only ever used in arithmetic, even the step that turns a missing value or a number that is not a number into 0 is made once, where the local is given its value, instead of at every use. The same goes for a list's `push()`, `pop()`, `contains()` and `indexOf()`: they compile to the list operation itself, right where they are called.
+- **A number stays a number.** When a `local` only ever holds numbers, the Forge knows it, and its arithmetic, its comparisons and its `%` compile to plain JavaScript arithmetic, with none of the checks a value of unknown kind needs. When such a local is only ever used in arithmetic, even the step that turns a missing value or a number that is not a number into 0 is made once, where the local is given its value, instead of at every use. A running total that starts at a written number and only ever has written numbers or a loop's own counter added to it or taken from it needs that step not even once. The same goes for a list's `push()`, `pop()`, `contains()` and `indexOf()`: they compile to the list operation itself, right where they are called.
 - **Line numbers cost nothing.** Every error still names its line. The Forge only records which line is running where something could actually go wrong, not on every line of plain arithmetic.
 - **A method is found where it is called.** `enemy.step()` looks up the archetype's method right at the call and calls it, with no trip through the engine. A call into a namespace, `math.floor()` or `vector()`, goes straight to the function the same way.
 - **Math is the browser's.** `sqrt()`, `floor()`, `sin()` and the rest compile to the browser's own math functions.
@@ -3114,7 +3209,7 @@ Five heavy frames, the kind a busy game has, each played for 300 frames on both 
 
 The HUD is the smallest gain because most of its work is handing texts to the screen, which costs the same on both engines. Where a frame is your own logic, 1.2 is tens to hundreds of times faster, and it makes next to no garbage, so the garbage collector almost never has to stop the game.
 
-And a real game: a platform game of 6,647 lines, with five bosses, crowds of enemies and menus, played with the same keys on both, each engine alone, as a tab has one game:
+And a real game, a large one with crowds of enemies and menus, played with the same keys on both, each engine alone, as a tab has one game:
 
 | A real game | 1.1 | 1.2 | 1.2 vs 1.1 |
 | --- | --- | --- | --- |
@@ -3436,9 +3531,11 @@ fixedUpdate() = function
 end
 ```
 
-A swarm already keeps its members as columns of numbers (19.10). `each fast` copies the columns its block uses into WebAssembly's memory, runs the whole loop there, and copies back the ones it changed, then removes the members it despawned. On 100,000 members that is about 0.9 ms against about 4 ms for the same `each` without the word. The rules of 19.15 already make a swarm's `each` numbers only, so most of them can simply add the word. Writing the loop with **vector instructions**, four members at every step, is the next step for `fast`.
+A swarm already keeps its members as columns of numbers (19.10). `each fast` runs the whole loop in WebAssembly on those columns where they are. The first time such a loop works on a column, the column moves into fast memory (19.23), the memory WebAssembly runs in, and stays there: from then on nothing is copied in and nothing is copied back, and the members the loop despawned are removed after it, as `each` removes them. On 100,000 members that is about 0.15 ms against about 2 ms for the same loop run as ordinary code. The rules of 19.15 already make a swarm's `each` numbers only, so most of them can simply add the word.
 
-An `each` without `fast` is still compiled to one tight JavaScript loop. `fast` is a promise the checker keeps: if the body ever stops being numbers only, it says so at the line, instead of quietly running slower.
+**An `each` without the word.** The Forge looks at every `each` over a swarm. When its block works on the member's numbers alone, it writes the WebAssembly for it as well, and the loop runs as that whenever what it meets is as the WebAssembly takes it: every field the block uses is a column of numbers, every name it reads from outside the loop holds a number, and every function it calls is the engine's own. A block that reads or gives a field `true` or `false`, reads a field of text, asks whether the member is `alive`, or calls a function of the game's own (one under a built in's name included) runs as it is written, every time. The answer is always the one the loop as written gives, bit for bit: in such a loop `sin`, `cos` and the rest are the browser's, as they are in ordinary code. `Tiber.forge.promote = false` turns it off, and `Tiber.forge.stats()` says how many loops ran this way.
+
+`fast` is still worth writing. It is a promise the checker keeps: if the body ever stops being numbers only, it says so at the line, instead of quietly running as ordinary code, and its math is TiberScript's own, the same on every machine (19.22).
 
 #### 19.22 The Same Answer on Every Machine
 
@@ -3503,14 +3600,14 @@ A thousand motes, four numbers each, in one buffer. TiberScript fills it and dra
 
 What that buys:
 
-- **`fast` code works on it where it is.** A buffer lives in the memory WebAssembly runs in, so a `fast` function that is handed one reads and writes it directly, with nothing copied in and nothing copied back. The Forge knows a parameter is a buffer by how the function uses it, `m[i]` or `m.length`. Inside `fast` code a read outside the buffer is `0` and a write outside it is left out, so a neighbour that is not there (`src[i - 1]` at the edge of a grid) needs no `if`.
+- **`fast` code works on it where it is.** A buffer lives in the memory WebAssembly runs in, so a `fast` function that is handed one reads and writes it directly, with nothing copied in and nothing copied back. The Forge knows a parameter is a buffer by how the function uses it, `m[i]` or `m.length`. Inside `fast` code a read outside the buffer is `0` and a write outside it is left out, so a neighbour that is not there (`src[i - 1]` at the edge of a grid) needs no `if`. A place that is not a whole number, `b[2.5]`, is outside it too, as it is in ordinary code. A counted loop whose places are steps of its counter, `b[i]`, `b[i * 2 + 1]`, or a local the loop sets once from it (`local a = i * 2` and then `b[a]`), looks once before it starts: when every such place is inside its buffer on the first turn and on the last, the loop runs without looking at each place again, about a third quicker. When one is not, it runs with every look, and the answer is the same either way.
 - **JavaScript sees the same memory.** A buffer handed to a `javascript` function or read in a `javascript` block is a typed array of numbers there, the same one, so a library written in JavaScript can fill it or read it.
 - **A shader reads it.** A buffer given to a shader is a list of numbers on the graphics chip (19.37): the lights of a scene, the heights of a terrain, a field of distances.
 - **It is part of the world.** The Timeline keeps a buffer's numbers and a rewind puts them back, into the same buffer. A forecast sees it as it will be and leaves it as it is, and `save.game()` saves it with everything else.
 
 A `fast` function takes an ordinary list in a buffer's place too. The list is copied in for the call and copied back after it, which is right for a small list and wasteful for a big one: what is big, and changes every tick, belongs in a buffer.
 
-Every buffer of a game shares one block of fast memory, 16 MB unless the game says otherwise, which is two million numbers. `Tiber.forge.memory = 64` at the start of `init()`, before the first buffer is made, gives it more. A buffer nothing holds any longer gives its room back, and one that does not fit stops with a message that says how much there is and how to give more. On a browser with no WebAssembly (`wasm.available` is `false`), a buffer is still a block of numbers that works the same way.
+Every buffer of a game shares one block of fast memory, 16 MB unless the game says otherwise, which is two million numbers. `Tiber.forge.memory = 64` at the start of `init()`, before the first buffer is made, gives it more. A buffer nothing holds any longer gives its room back. One that does not fit is kept outside fast memory, and the console says so once, with how much there is and how to give more: it is a buffer like any other, and `fast` code copies it in for each call and back after it, which is slower. On a browser with no WebAssembly (`wasm.available` is `false`), a buffer is still a block of numbers that works the same way.
 
 Measured on 100,000 motes, the loop above: 0.63 ms as WebAssembly, 0.70 ms as the JavaScript the Forge writes for the same `fast` function, 0.74 ms without the word `fast`, and 1.2 ms when the numbers are kept in an ordinary list instead. The buffer is most of the gain, and that is the plain truth of it: a browser's JavaScript is very good at a simple loop over numbers that sit side by side. WebAssembly adds the rest, a little here and more on heavy arithmetic, and it adds what JavaScript cannot: the same answer on every machine (19.22).
 
@@ -3610,7 +3707,8 @@ end
 | `Tiber.forge.glsl(shader)` | the GLSL it wrote for a shader |
 | `Tiber.forge.time(fn, times, ...)` | calls a function that many times with the values that follow, and gives how long one call takes, in milliseconds |
 | `Tiber.forge.compileAll()` | compiles every function nobody has called yet, now, and says how many there were |
-| `Tiber.forge.stats()` | the counts: `files`, `functions`, `compiled`, `webassembly`, `shaders`, `javascriptBlocks`, `buffers`, `memoryUsed` and `memory` in megabytes |
+| `Tiber.forge.stats()` | the counts: `files`, `functions`, `compiled`, `webassembly`, `shaders`, `javascriptBlocks`, `buffers`, `memoryUsed` and `memory` in megabytes, `fastLoops` (the `each` loops run as WebAssembly), `promotedLoops` (those the Forge chose by itself), `columns` (swarm columns kept in fast memory) and `buffersOutside` (buffers that did not fit) |
+| `Tiber.forge.promote` | `true` to start: an `each` over a swarm whose block works on numbers alone runs as WebAssembly without the word `fast` (19.21). `false` runs it as written |
 | `Tiber.forge.useWasm` | `true` to start. `false` runs every `fast` function as the JavaScript the Forge also wrote for it |
 | `Tiber.forge.memory` | the megabytes of fast memory buffers share (19.23) |
 
@@ -3666,6 +3764,10 @@ WebAssembly was measured against JavaScript before this part was built. The WebA
 | A snapshot of 100,000 bullets | 0.043 ms | 0.043 ms, the same | |
 
 Every WebAssembly run gave exactly the same answer as the JavaScript one.
+
+**A sum of whole numbers, worked out side by side.** A counted loop that only adds to its locals, or takes from them, amounts made from its counter, written whole numbers and locals it leaves alone, with `+`, `-` and `*`, is a sum. A processor has to finish one addition to a number before it can start the next one to the same number, but it makes additions to different numbers at the same time. So the Forge runs such a loop as eight sums side by side and adds them up at the end, and `fast` code does the same with two numbers in each step, or four when the loop adds its counter itself, counting up by one from 0 to under a billion: whole numbers that small fit four to a step where any number fits two. While every number is whole and stays under 2^52, every addition is exact, and the order of exact additions cannot change their total: the answer is the one the loop as written gives, to the last digit. Anything else, a fraction, a number that large, or a local that is not a number yet, runs the loop as it is written. Adding up a billion numbers this way takes about a sixth of a second in TiberScript and about 60 ms in `fast` code, on a recent laptop, and a game that hands the work to every core at once (19.19) counts them in about 15 ms.
+
+**Fast code checks what it is given.** A `fast` function that does not call itself looks at the numbers it is handed before it does anything: given one that is not a finite number (an infinity, "not a number"), it hands the whole call to the same function as ordinary code, which gives the answer 1.1 would. Inside, every number is then known to be finite, and the checks a sum would need at every step are left out.
 
 Plainly: on code that mixes arithmetic with looking things up, like the bullet hell's grid, WebAssembly is about 1.3 to 1.4 times faster than JavaScript that was already well written. On pure arithmetic over a crowd, which is what moving particles, sparks and swarms is, it is about twice as fast, and six times as fast with vector instructions. Snapshots are already as fast as memory can be copied, in both.
 
@@ -3787,7 +3889,7 @@ end
 - a black hole bending the stars behind it (`screen.shade()` reads `pixel()` too, for the area it fills),
 - night vision, a thermal camera, an old photograph, a dream.
 
-The extra parameters work as in `screen.shade()`. What is drawn after `screen.shader()`, the HUD for example, is drawn over its result and is not changed by it. A shader that reads `pixel()` costs a little more than one that does not, because the frame has to be handed to the graphics chip first: on a recent laptop, a whole frame of 1920 by 1080 pixels read and changed takes between 1.3 and 3.2 ms.
+The extra parameters work as in `screen.shade()`. What is drawn after `screen.shader()`, the HUD for example, is drawn over its result and is not changed by it. A shader that reads `pixel()` costs a little more than one that does not, because the frame has to be handed to the graphics chip first: on a recent laptop, a whole frame of 1920 by 1080 pixels read and changed takes between 1.3 and 3.2 ms. Some browsers copy the picture out of their own memory first, every time it is handed over, and that can cost a large part of a frame. The engine watches it, and says so once in the console when it is so. `screen.lens()` and `screen.shockwave()` (23.14), `screen.water()` and `screen.mirror()` (23.13) bend the picture without handing it over, the same in every browser.
 
 #### 19.31 noise(): Clouds, Fire and Water Nobody Painted
 
@@ -3846,7 +3948,7 @@ And a shader called from ordinary code is an ordinary function: it runs on the p
 
 - **A shader can be tested.** `test "the flag is red at the left" do assert(flag(0.01, 0.5).r > 0.7) end` runs with the game's other tests, with no screen.
 - **The game can read what it draws.** A lava shader called with the hero's position says whether the hero is standing in the hot part.
-- **A computer with no graphics chip still shows the game.** Where WebGL 2 is missing or turned off, `screen.shade()` and `screen.shader()` run the same shader on the processor, at about 60,000 points of the area, stretched smooth to fill it: softer, and slower, but the same picture. The debug overlay's graphics chip line ends with `(on the processor)` when that is happening.
+- **A computer with no graphics chip still shows the game.** Where WebGL 2 is missing or turned off, `screen.shade()` and `screen.shader()` run the same shader on the processor, at about 60,000 points of the area, stretched smooth to fill it: softer, and slower, but the same picture. On a slow processor a shader is worked out at fewer points (down to 2,400), so that each one takes about 2.5 ms of a frame at most, timed on that computer as it runs: a quality or `Tiber.shaderScale` is then the most it draws, not the least. The debug overlay's graphics chip line ends with `(on the processor)` when that is happening.
 
 The tests of 1.2 check the two against each other: every shader in them is drawn by a real graphics chip, read back, and compared pixel by pixel with the same shader run on the processor, and they agree to within 0.2% of a color's brightness (the tests allow 2%).
 
@@ -4016,6 +4118,22 @@ Four lamps in a row, each a soft glow, and a checkered badge that turns above th
 `Tiber.shaderScale` is the quality of every draw that does not say its own: `Tiber.shaderScale = 0.5` from a settings menu, for a phone or an older laptop. `Tiber.shaderScale = "auto"` lets the engine choose. It starts at 1, steps down a quarter at a time, to 0.25 at the least, while the game draws fewer pictures a second than the screen and the browser show, steps back up when there is room again, and says so once in the console.
 
 How many pixels the whole game has to begin with is the game's to say as well: `Tiber.resolution = 1440` draws it on a frame 1440 lines high, `"4k"` on one 2160 lines high, and `720` on a small one for an old computer (21.3).
+
+**Numbers back from the chip.** A shader can work for the game as well as for the picture:
+
+```tiberscript
+shader heights(u, v, seed) = function
+  return color(noise(u * 8, v * 8, seed) * 100, u, v, 1)
+end
+
+init() = function
+  field = screen.compute(heights, 64, 32, 7)
+  points = field.length / 4
+  corner = field[0]
+end
+```
+
+`screen.compute(shader, wide, high, ...)` works the shader out at every point of a grid `wide` points across and `high` points up, with `u` and `v` the middle of each point, from 0 to 1, and hands back what it returned: a buffer of `wide * high * 4` numbers, the four numbers of each point (a color's r, g, b and a), row after row from the bottom. They are not held between 0 and 1: a shader that returns 100 gives 100. The numbers after `high` are the shader's own, as in `screen.shade()`, and `into = buffer` fills a buffer the game made already instead of making one each time. The graphics chip keeps a number to seven digits, so a whole number is exact up to 16,777,216. Where there is no chip to do it, the processor works the shader out instead, to the same seven digits. A grid of a million points is one call: a field of heights, a map of where light reaches, or a billion numbers added up, four thousand at each point.
 
 #### 19.38 What It Costs, and Why It Belongs Here
 
@@ -4294,8 +4412,11 @@ That is the biggest update of all.
 | **The Forge's say** | `Tiber.forge.kind(fn)`, `.javascript(fn)`, `.wasm(fn)`, `.glsl(shader)`, `.time(fn, times, ...)`, `.compileAll()`, `.stats()`, `.useWasm`, `.memory` | Part Three (19.25). What every function became, and a few choices of your own. |
 | **Profile and cache** | `Tiber.forge.profile`, `Tiber.forge.hot(n)`, `Tiber.forge.cache`, `Tiber.forge.cacheUsed`, `Tiber.forge.clearCache()` | Part Three (19.25). Which functions take the time, and the compiled code the browser keeps. |
 | **The Graphics Chip** | `shader name(u, v, ...) = function`, `glsl name(u, v, ...) = function`, `screen.shade(shader, x, y, w, h, ..., blend = , opacity = )`, `screen.shader(shader, ..., blend = , opacity = )`, `quality = `, `sprite = `, a parameter read as a list (`points[i]`, `points.length`), `pixel(u, v)`, `previous(u, v)`, `image(name, u, v)`, `image(u, v)`, `blur(u, v, radius)`, `noise(x, y, z)`, `fbm()`, `voronoi()`, `hash()`, `luma()`, `dot()`, `sdCircle()`, `sdBox()`, `sdLine()`, `rotateX()`, `rotateY()`, `checker()`, `aspect()`, `saturate()`, `contrast()`, `color()`, `gray()`, `hsl()`, `mix()`, `smoothstep()`, `fract()`, `Tiber.shaderScale`, `swarm.drawPoints(size, color)`, `swarm.moveOnChip(shader, ...)` (Section 25) | Part Four. TiberScript run on the graphics chip, once for every pixel. |
+| **Numbers from the chip** | `screen.compute(shader, wide, high, ..., into = )` | Part Four (19.37). A shader worked out at every point of a grid, its numbers handed back as a buffer. |
+| **Timing work** | `time.stopwatch`, `time.wallClock` | Section 21.4. Milliseconds with their fractions, and the clock on the wall. |
 | **Light** | `lighting.ambient`, `.tint`, `.shadows`, `.glow`, `.quality`, `.walls`, `.softness`, `.block()`, `.blockLine()`, `.blockCircle()`, `.draw()`, `.at()`, `.colorAt()`, `.dark()`, `.off()`, `.count`, `.lastCount`, `screen.light(x, y, radius, color, strength, shadows = , flicker = )`, `screen.spotlight(x, y, radius, angle, width, color, strength)`, `screen.sunlight(angle, strength, color, length)`, `screen.glow(x, y, radius, color, strength)`, `swarm.lights(radius, color, strength)` | Section 23. Lights, sunlight, shadows, glow, and how bright a place is. |
-| **Mirrors and water** | `lighting.mirror(x1, y1, x2, y2, strength)`, `lighting.bounced`, `screen.mirror(x, y, w, h, side, strength, tint = , fade = , ripple = , scale = , blur = )`, `screen.water(x, y, w, h, ...)` | Section 23.13. A mirror that throws light back, and rectangles that show the picture turned over, still or rippling. |
+| **Lenses and shockwaves** | `screen.lens(x, y, radius, strength, core = , spin = , ring = , ringAmount = , rings = )`, `screen.shockwave(x, y, radius, width, push, color, amount = )` | Section 23.14. The picture bent round a point, the same in every browser. |
+| **Mirrors and water** | `lighting.mirror(x1, y1, x2, y2, strength)`, `lighting.bounced`, `screen.mirror(x, y, w, h, side, strength, tint = , fade = , ripple = , scale = , blur = )`, `screen.water(x, y, w, h, ...)`, `screen.reflect(x1, y1, x2, y2, depth, strength, tint = , fade = )` | Section 23.13. A mirror that throws light back, rectangles that show the picture turned over, still or rippling, and a mirror along any line. |
 | **Effects** | `effects.crt`, `.bloom`, `.scanlines`, `.vignette`, `.chromatic`, `.grain`, `.pixelate`, `.tint`, `.tintAmount`, `.active`, `.off()`, `effects.filter(shader, ...)` (`.strength`, `.on`, `.set()`, `.remove()`), `effects.filters`, `effects.clearFilters()` | Section 23. A finish on the whole frame, and your own shaders stacked on it. |
 | **Physics** | `physics.add(obj, "box", w, h)`, `physics.add(obj, "circle", r)`, `physics.add(tilemap)`, `fixed =`, `bounce =`, `friction =`, `mass =`, `gravity =`, `physics.push()`, `physics.touching()`, `physics.remove()`, `physics.gravity`, `.iterations`, `.paused`, `.count`, `.bodies()`, `body.contacts`, `body.grounded`, `body.angle` | Section 24. Bodies that rewind, forecast and roll back exactly. |
 | **Modules** | `import "file"`, `export name = ...`, `export const NAME = value`, `export javascript ... end` | Real multiple file projects. An exported value is shared, not copied, and a module's own functions come first inside it. |
@@ -4322,13 +4443,14 @@ That is the biggest update of all.
 | **Quick events** | `on("name") do (data) ... end`, `trigger("name", data)` | Decoupled, global communication. |
 | **Signals** | `signal name(args)`, `.trigger()`, `.connect()`, `.disconnect()` | Declared, typed communication scoped to one object. |
 | **Controllers** | `gamepad(n).held()`, `.hit()`, `.released()`, `.amount()`, `.axis()`, `.angle()`, `.anyHit()`, `.button()`, `.label()`, `.drawButton()`, `.draw()`, `.rumble()`, `.stopRumble()`, `.connected`, `.kind`, `.name`, `.player`, `.model`, `.joycon`, `.setUp`, `.silent`, `.layout`, `.canRumble`, `.deadzone`, `controllers.count`, `.list`, `.first`, `.held()`, `.hit()`, `.anyHit()`, `.button()`, `.setup()`, `.setupKey`, `.forget()`, `.settingUp`, `.deadzone`, `.hint`, `.pairJoycons`, `.report()`, `.rawReport()`, `on("controllerConnected")`, `on("controllerDisconnected")` | Every controller, wired or wireless, by where its buttons are. |
-| **Controllers read directly** | `controllers.direct`, `controllers.connect()`, `pad.direct`, `pad.pace`, `pad.motion`, `pad.battery`, `pad.setLight(color)` | Section 7. Nintendo's, Sony's and Microsoft's controllers read from their own reports the moment they arrive, by microStudio's bridge or by the browser: the controller's own pace, its sticks' calibration, the motion sensor, the battery, rumble and the player's light. |
+| **Controllers read directly** | `controllers.direct`, `controllers.connect()`, `pad.direct`, `pad.pace`, `pad.motion`, `pad.battery`, `pad.setLight(color)` | Section 7. Every controller read from its own reports the moment they arrive, by microStudio's bridge or by the browser: the controller's own pace, its sticks' calibration, the motion sensor, the battery, rumble and the player's light. |
 | **Keyboards** | `key("primary")` (Command on a Mac, an iPhone and an iPad, Control elsewhere), `key("command")`, `key("option")`, Control Shift and a number for F1 to F10, `system.platform` | One keyboard for every computer. Section 7. |
-| **The mouse** | `mouse.wheel` (1 down, -1 up, 0), `mouse.hit` (a click between two updates counts too) | Section 7. |
+| **The mouse** | `mouse.wheel` (1 down, -1 up, 0), `mouse.hit` (a click between two updates counts too), `mouse.released` (the update a button came up) | Section 7. |
 | **Held, tapped, repeated** | `pad.heldFor(name)`, `pad.repeat(name, delay, rate)`, `pad.tapped(name)`, `pad.longPress(name, ticks)`, `pad.doubleTap(name)`, the same on `controllers`, `key(name).heldFor`, `.repeat`, `.released`, `action(name).repeat`, `repeats(ticksHeld, delay, rate)` |
 | **How far down counts** | `controllers.threshold`, `pad.threshold`, `pad.setThreshold(name, press, release)`, `controllers.stickThreshold`, `controllers.curve`, `pad.raw(axis)`, `pad.stick("left")`, `controllers.amount(name)`, `controllers.axis(name)`, `"lsUp"` to `"rsRight"`, the words (`"light"`, `"wide"`, `"aim"`...) and `"auto"`, `controllers.feel`, `pad.drift` |
 | **More buttons** | `"extra"` (`"touchpad"`, `"capture"`, `"share"`), `"touch"`, `"mute"`, `"paddle1"` to `"paddle4"`, `"chat"`, `"sl"`, `"sr"`, `"cUp"` to `"cRight"`, `pad.has(name)`, `pad.touches`, `pad.setTrigger(name, strength, from)`, `controllers.inUse`, `controllers.active`, `controllers.rumble()` |
-| **The settings screen** | F4, or START with SELECT; `Tiber.settings.open()`, `.close()`, `.isOpen`, `.next(name)`, `.set(name, value)`, `.get(name)`, `.name(name)`, `.changed`, `.reset()`, `.rumble`, `.key`, `.combo` |
+| **The settings** | the Settings library, opened by the key and the button the game chooses (`Settings.key`, `Settings.button`) or from the game's own menu; `Tiber.settings.open()`, `.close()`, `.isOpen`, `.next(name)`, `.previous(name)`, `.set(name, value)`, `.get(name)`, `.name(name)`, `.lines`, `.changed`, `.reset()`, `.rumble`, `.combo`, `.comboHeld`, `.screen` |
+| **Screens over the game** | `Tiber.hold(screen)`, `Tiber.release()`, `Tiber.held`, `Tiber.everyTick(fn)`, `Tiber.bindings`; the Settings library and the PerfMonitor library |
 | **Transitions** | `transition.fade(seconds) do ... end`, `transition.wipe(seconds, from)`, `transition.iris(seconds, x, y)`, `transition.blinds(seconds)`, `color = `, `back = `, `hold = `, `count = `, `transition.active`, `transition.phase`, `transition.covered`, `transition.kind`, `transition.stop()` | Section 5. The screen covered, the block run while it is, and uncovered. |
 | **Colors** | `colors.mix(a, b, amount)`, `colors.lighten()`, `colors.darken()`, `colors.fade(color, alpha)`, `colors.rgb()`, `colors.hsl()`, `colors.parts()`, `colors.brightness()`, `colors.valid()` | Section 2. One color made from another. |
 | **Springs and watch** | `springTo(object, "field", target, stiffness = , damping = )`, `watch(label, value)`, `Tiber.watch` | Sections 2 and 12. A number that reaches its target with a bounce, and values shown on the running game. |
@@ -4344,20 +4466,21 @@ That is the biggest update of all.
 | **UI** | `ui.button()`, `ui.healthbar()`, `ui.textbox()` | Built in UI primitives. |
 | **Dialogue** | `dialogue "text" speaker="Name" do`, `choice "text" do`, `Tiber.talking` | Branching conversation system. |
 | **Collision** | `.collisionShape()`, `.collisionLayer()`, `.collidesWith()`, `resolve()` | Shapes, layers, and real resolution. |
-| **Tile maps** | `tilemap(name, x = , y = )`, `.solid()`, `.oneWay()`, `.collide(obj)`, `.tileAt()`, `.set()`, `.onFloor` | Platformer collision against a map, done for you. |
+| **Tile maps** | `tilemap(name, x = , y = )`, `.solid()`, `.oneWay()`, `.collide(obj)`, `.tileAt()`, `.tileIdAt()`, `.set()`, `.find(tile)`, `.draw()`, `.onFloor` | Platformer collision against a map, done for you; markers painted in the map editor found by `find()`. Section 11. |
+| **A project's files** | `asset_manager.loadJSON(name)`, `.loadCSV()`, `.loadText()`, `.loadMarkdown()`, `.ready`, `.data`, `.text`, `string.toNumber(text, fallback)` | The project's own JSON, CSV, text and Markdown assets, read while the game runs. Section 11. |
 | **Noise** | `noise(x)`, `noise(x, y)`, `noise(x, y, z)` | Smooth randomness for terrain, flicker and wandering. |
 | **Pathfinding** | `path.find(map, from = , to = , diagonal = )` | Shortest walkable route, or `null`. |
 | **Timers** | `schedule()` returns a handle, `cancelSchedule(handle)` | Timers you can call off. |
 | **Randomness** | `seedRandom()`, `randomFloat()`, `randomBool()`, `randomChoice()`, `randomSign()` | Everything `random()` alone never covered. |
 | **Testing** | `test "name" do`, `test "name" replay "run" do`, `assert(cond)` | On demand correctness checks, and tests that play. |
-| **Frame rate** | `Tiber.frameRate = 60 / 120 / 240 / "auto"`, `Tiber.renderScale = 1 / 0.75 / 0.5 / "auto"`, `Tiber.resolution = 720 / 1080 / 1440 / "4k" / "native"`, `Tiber.frameWidth`, `Tiber.frameHeight`, `Tiber.fps`, `Tiber.smooth`, `Tiber.tickRate = 60 / 120 / 240 / "auto"`, `Tiber.tickScale`, `Tiber.dt`, the performance monitor's switches (F3) | Smooth on every computer, and 120 or 240 updates a second (Section 21). |
+| **Frame rate** | `Tiber.frameRate = 60 / 120 / 240 / "auto"`, `Tiber.renderScale = 1 / 0.75 / 0.5 / "auto"`, `Tiber.resolution = 720 / 1080 / 1440 / "4k" / "native"`, `Tiber.frameWidth`, `Tiber.frameHeight`, `Tiber.fps`, `Tiber.smooth`, `Tiber.tickRate = 60 / 120 / 240 / "auto"`, `Tiber.tickScale`, `Tiber.dt`, the performance monitor's switches, and UNLOCKED past the screen's refresh (21.6) | Smooth on every computer, and 120 or 240 updates a second (Section 21). |
 | **HTML blocks** | `html name ... end`, `$(value)`, `do="code"`, `bind="name"`, `show="condition"`, `each="item in list"`, `\$(`, `Tiber.html` | Part Five (19.39). A page written in the game's own file, its values always up to date. |
 | **HTML pages** | `html.show(name)`, `html.hud(name)`, `html.hide(name)`, `html.send(name, text)`, `html.receive(name)`, `html.set(name, id, text)`, `html.page(name, text)`; in the page `game.send()`, `game.on()` and `data-send` | The project's own web pages over the game (Section 9). |
 | **Platform** | `platform.define()`, `.unlock()`, `.unlocked()`, `.achievementList()`, `.clearAchievement()`, `.stat()`, `.setStat()`, `.addStat()`, `.submitScore()`, `.scores()`, `.refreshScores()`, `.cloudSave()`, `.cloudLoad()`, `.cloudDelete()`, `.user()`, `.setPlayerName()`, `.setPresence()`, `.openOverlay()`, `.showToasts()`, `.events()`, `.use()`, `.name`, `.ready` | Steam, Epic, consoles or the browser (Section 22). |
 | **Save data** | `save.set()`, `save.get()`, `save.setObject()`, `save.getObject()`, `save.write()`, `save.list()`, `save.use()`, `save.delete()`, `save.game()`, `save.loadGame()`, `save.hasGame()`, `save.gameInfo()`, `save.deleteGame()` | Structured persistence, and a whole game saved in one line. |
 | **Networking** | `network.send()`, `network.on("event") do (msg, from)` | Multiplayer hooks. |
 | **Tiber** | `Tiber.extendArchetype()`, `Tiber.hasFeature()`, `Tiber.showDebugOverlay()`, `Tiber.runTests()`, `Tiber.tunables()`, `Tiber.setTunable()`, `Tiber.version`, `Tiber.forge` | Extending, checking, testing and inspecting the engine itself. |
-| **Capture** | `capture.shot(name)`, `capture.moment(name)`, `capture.auto`, `capture.clips`, `capture.onAction(name)`, `capture.offAction(name)`, `capture.quiet`, `capture.on`, `capture.list`, `capture.last`, `capture.count`, `capture.save(item)`, `capture.clear()`, `on("captured")` | Section 26. Pictures and short clips of a game's best moments, taken by the game or found by the engine itself. |
+| **Capture** | `capture.shot(name, info)`, `capture.moment(name, info)`, `capture.draw(item, x, y, w, h, frame)`, `capture.frameTick(item, frame)`, `capture.auto`, `capture.clips`, `capture.onAction(name)`, `capture.offAction(name)`, `capture.quiet`, `capture.on`, `capture.list`, `capture.last`, `capture.count`, `capture.save(item)`, `capture.clear()`, `on("captured")` | Section 26. Pictures and short clips of a game's best moments, taken by the game or found by the engine itself. |
 
 ---
 
@@ -4365,7 +4488,7 @@ That is the biggest update of all.
 
 ### 21.1 Two numbers: pictures drawn, and updates
 
-Turn on the developer overlay (F3) on a screen that refreshes 120 times a second, as many recent laptops, tablets and phones do, and it can say 120 while your game's own counter says 60. Both are right. The game updates 60 times a second: `fixedUpdate()` and `update()` run 60 times a second, `seconds(1)` is a second of them, and every speed in your game is written for that (a game can be written for 120 updates as well, 21.7). The screen may ask for a new picture 120 times a second. Before 1.2's frame rate setting, every other picture on such a screen was the same picture drawn again. The overlay's first line now says both: `120 fps   60 updates a second`. The next two say how often the monitor refreshes and what is in charge of each number: `monitor 120 Hz`, then `pictures GAME   updates 60`.
+Turn on the performance monitor (its library, 21.6) on a screen that refreshes 120 times a second, as many recent laptops, tablets and phones do, and it can say 120 while your game's own counter says 60. Both are right. The game updates 60 times a second: `fixedUpdate()` and `update()` run 60 times a second, `seconds(1)` is a second of them, and every speed in your game is written for that (a game can be written for 120 updates as well, 21.7). The screen may ask for a new picture 120 times a second. Before 1.2's frame rate setting, every other picture on such a screen was the same picture drawn again. The monitor's first line says both: `120 fps   60 updates a second`. The next says how often the screen refreshes and what the game aims for, `screen 120 Hz   aiming for 120 fps`, and a later one what is in charge of each number: `pictures GAME   updates 60`.
 
 ### 21.2 Tiber.frameRate
 
@@ -4392,7 +4515,7 @@ end
 - **240.** The same, with up to three pictures between two updates, for a screen that refreshes 240 times a second. On a slower screen it draws as many as the screen shows.
 - **"auto"** draws as many pictures as the screen shows, up to 240 (120 on a screen under 200 Hz), while the game's work leaves room for it. It goes back to 60 when a frame's update and drawing take more than about three quarters of a frame on average (6 ms at 120, 3 ms at 240), and back up when they take less than about two fifths of one (3.5 ms at 120, 1.75 ms at 240).
 
-The drawing has to be in `draw()` for 120 and 240: that is how the engine knows what is drawing and what is game. A game that draws in `update()` stays at 60, and says so once in the console. On a 60 Hz screen, 60, 120 and 240 look the same.
+The drawing has to be in `draw()` for 120 and 240: that is how the engine knows what is drawing and what is game. A game that draws in `update()` stays at 60. When the game itself asked for 120 or 240, the console says so once; when the player picked it on the performance monitor, the monitor says so on its frameRate line. On a 60 Hz screen, 60, 120 and 240 look the same.
 
 `Tiber.fps` is how many pictures a second the game is drawing right now, `Tiber.smooth` is true while it draws in between, and `Tiber.tickRate` is the updates a second, 60 unless the game asks for more (21.7). A click is one click and a flash lasts its updates, however many times the screen is drawn in between.
 
@@ -4404,7 +4527,7 @@ init() = function
 end
 ```
 
-How many pixels the game draws, compared with the window: 1 is every pixel (the default), 0.75 is a little over half as many, 0.5 a quarter. The picture is stretched to the window, so the game looks the same, only softer. **"auto"** starts at 1 and steps down by a quarter (to 0.5 at the lowest) when, three seconds running, the game draws fewer pictures a second than the screen and the browser show, or its own work fills every frame, and says so once. A screen slower than the game asks for (a 60 Hz screen for a game set to 120 or "auto") and a browser that holds the page to 30 pictures a second to save the battery are not the game being slow, and keep every pixel. On a computer whose graphics cannot fill a big window in time, this is what keeps 60 frames a second. It goes from 0.25 up to 4: above 1 the game draws more pixels than the window has and the picture is drawn down to fit, which smooths every edge, for a computer with the graphics to spare.
+How many pixels the game draws, compared with the window: 1 is every pixel (the default), 0.75 is a little over half as many, 0.5 a quarter. The picture is stretched to the window, so the game looks the same, only softer. **"auto"** starts at 1 and steps down by a quarter (to 0.5, and on to 0.25 only while the game still draws fewer than 60% of the pictures it should, as on a computer whose browser has no graphics chip to draw with) when, three seconds running, the game draws fewer pictures a second than the screen and the browser show, or its own work fills every frame, and says so once. A screen slower than the game asks for (a 60 Hz screen for a game set to 120 or "auto") and a browser that holds the page to 30 pictures a second to save the battery are not the game being slow, and keep every pixel. On a computer whose graphics cannot fill a big window in time, this is what keeps 60 frames a second. It goes from 0.25 up to 4: above 1 the game draws more pixels than the window has and the picture is drawn down to fit, which smooths every edge, for a computer with the graphics to spare.
 
 **`Tiber.resolution`** says the same thing the way a game's settings menu does, as the height of the picture in lines:
 
@@ -4425,7 +4548,7 @@ The game's own units do not change with any of this. The screen is 200 units hig
 
 ### 21.4 What it costs, measured
 
-On a recent laptop, in a browser, a platform game of six thousand lines in its heaviest moment (a boss fight in a full arena):
+On a recent laptop, in a browser, a large game in its heaviest moment (a fight in a full arena):
 
 | | Update a frame | Drawing a frame | Work in a second |
 | --- | --- | --- | --- |
@@ -4434,13 +4557,26 @@ On a recent laptop, in a browser, a platform game of six thousand lines in its h
 
 That is the game's own work, in the browser's script engine. The rest of a frame is the browser turning the drawing into pixels, and that depends on the graphics chip and the size of the window. With the graphics chip doing it (the browser's hardware acceleration, on by default), filling a window is a small fraction of a frame on every computer in the table below. Without it, the browser fills every pixel on the main processor: the same frame then took 15 ms at 2560 by 1440 pixels. That is the case `Tiber.renderScale` and a lower `Tiber.resolution` are for.
 
+A game can time its own work with `time.stopwatch`, milliseconds since the page opened with their fractions, as finely as the browser gives them: read it before the work and after it. `time.wallClock` is the clock on the wall, in whole milliseconds.
+
+```tiberscript
+init() = function
+  local start = time.stopwatch
+  local total = 0
+  for i = 1 to 100000 do
+    total += i
+  end
+  took = time.stopwatch - start
+end
+```
+
 ### 21.5 The hardware it needs
 
-The game's own work grows with how fast one core of the processor is. These are the computers TiberScript games run well on, for a full game: a platform game with bosses and crowds of enemies, a game for a phone, a scene of lights and shaders. One computer was measured. The others are worked out from it: each processor's single core speed against the measured one's, with the same game, and room to spare for the browser and the drawing. A browser means a current one with hardware acceleration on. Every export (Windows, Linux, macOS, Raspberry Pi) runs in the same browser engine, Chromium, and needs the same.
+The game's own work grows with how fast one core of the processor is. These are the computers TiberScript games run well on, for a full game: crowds of enemies, lights and shaders, on a computer or on a phone. One computer was measured. The others are worked out from it: each processor's single core speed against the measured one's, with the same game, and room to spare for the browser and the drawing. A browser means a current one with hardware acceleration on. Every export (Windows, Linux, macOS, Raspberry Pi) runs in the same browser engine, Chromium, and needs the same.
 
 | Platform | 60 frames a second | 120 frames a second |
 | --- | --- | --- |
-| **Mac** | Any Mac from 2015 on (Intel Core i5 5th generation, Intel Iris 6100 or better), macOS 11 or later, 4 GB | A Mac with a 120 Hz screen: MacBook Pro 14 or 16 inch (2021 on, Apple M1 Pro or later), or any Apple Silicon Mac with a 120 Hz display |
+| **Mac** | Any Mac from 2015 on (Intel Core i5 5th generation, Intel Iris 6100 or better), macOS 11 or later, 4 GB | Any Apple Silicon Mac with a 120 Hz screen |
 | **Windows** | A 2016 laptop: Intel Core i3 or i5 6th generation (or AMD A10 / Ryzen 3 2200U), Intel HD 520 graphics or better, 4 GB, Windows 10 | Intel Core i5 10th generation or AMD Ryzen 5 3500U or later, a 120 Hz or faster screen, Windows 10 or 11 |
 | **Linux** | The same as Windows, with the graphics drivers your distribution recommends (Mesa for Intel and AMD) | The same as Windows, on a 120 Hz screen |
 | **Chromebook** | Intel Celeron N4000 (2019) or better, 4 GB; `Tiber.renderScale = 0.75` at full screen | A Chromebook Plus (Intel Core i3 12th generation or later) with a 120 Hz screen |
@@ -4455,7 +4591,31 @@ Two things change these numbers more than any processor does. A game's own work:
 
 ### 21.6 The Switches in the Performance Monitor
 
-The performance monitor is the developer overlay: F3 in any game, or the gauge button in the editor's run window. Under its numbers and its graph are two rows of switches, so the frame rate is changed right beside the numbers that show what it does.
+The performance monitor is a library, PerfMonitor (Import Libraries, under Built In Libraries), the same in all twelve languages. No key shows it until the game picks one, so it never takes a key the game uses. In `init()`:
+
+```text
+PerfMonitor.useKey("m")            the M key shows it, and hides it
+PerfMonitor.useKey("backquote")    the key left of 1
+PerfMonitor.useKey("")             no key at all (how it starts)
+```
+
+A letter, a digit or a name works: `"tab"`, `"backquote"`, `"escape"`, `"enter"`, `"space"`, `"arrowUp"`, and the game still gets the key as well. A game can also show it from a menu of its own, with no key at all: `PerfMonitor.show()`, `PerfMonitor.hide()` and `PerfMonitor.toggle()`. It remembers being shown, and it is there again when the game starts again, in the editor and in an exported game alike. Without the library a game has no monitor at all. Under its numbers and its graph are two rows of switches, so the frame rate is changed right beside the numbers that show what it does.
+
+**The numbers are the screen's own.** The monitor measures how fast the screen refreshes on its own, from the fastest the browser has gone, and holds every frame against that. A computer that draws only 40 pictures a second on a 60 Hz screen is shown as exactly that: 40 fps, a 60 Hz screen, and a refresh dropped after nearly every picture. A monitor that took the screen's refresh from the frames the game managed would call that a 40 Hz screen with every frame on time, which is how a slow computer used to look as smooth as a fast one. The lines are:
+
+- the pictures drawn in the last second, counted, and the updates a second;
+- the screen's refresh, and the frame rate the game aims for;
+- the 1% low, the frame rate of the slowest frames of the last four seconds, and the longest frame;
+- the frames dropped in the last four seconds: refreshes the screen had to show twice;
+- each frame's time, split into the game's own code and the other time: the browser, the graphics chip drawing the picture, and the wait for the screen's next refresh, which is most of each frame while the game's code is quick;
+- the time of `update()` and of `draw()`, and the updates each picture carries;
+- what is in charge of the pictures and of the updates;
+- the canvas size and its pixel ratio, the language, and how finely this browser's clock counts (a clock that counts whole milliseconds is said so, since times under a millisecond are then only averages);
+- in TiberScript, `Tiber.frameRate` and `Tiber.tickRate` as they are now, the resolution, the detail and the shaders, the objects and swarms alive, and the lights and the graphics chip at work;
+- any line the game adds itself, `PerfMonitor.note("enemies", enemies.length)`;
+- when the frames are slow, why: the game's own code, the browser holding the page back (Low Power Mode, a battery saver, a hidden window), or the drawing itself, which fewer pixels help.
+
+The library's own functions read the same numbers in the game: `PerfMonitor.fps()`, `PerfMonitor.low()`, `PerfMonitor.screen()`, `PerfMonitor.dropped()`, and `PerfMonitor.show()`, `.hide()`, `.toggle()` and `.visible()`. Every language has the same library, under the names that language uses.
 
 **pictures** tries a game at another frame rate without touching its code:
 
@@ -4463,11 +4623,13 @@ The performance monitor is the developer overlay: F3 in any game, or the gauge b
 - **60**, **120** and **240** are those frame rates, whatever the game asks for.
 - **AUTO** follows the monitor: as many pictures a second as it shows, 60 on a 60 Hz screen, 120, 144 or 240 on a fast one, and back down to 60 when frames get heavy.
 
+**Past the screen's refresh: UNLOCKED.** Pick 240 on a 120 Hz screen and the monitor says so, in amber: `UNLOCKED: 240 pictures a second past this 120 Hz screen`. The frame rate is unlocked: every picture is drawn, the screen shows the newest one at each refresh, and the time from a press to the screen gets shorter. The switch turns amber too, and holding the pointer over it says the same. While it is unlocked, a frame counts as dropped when its picture comes later than the rate the game aims for.
+
 **updates** is GAME, 60, 120, 240 or AUTO updates a second (21.7). **GAME** is what the game asks for with `Tiber.tickRate`, and it is where every game starts. The others can only be picked for a game written to allow it, with `Tiber.tickRate = "auto"` (or `"any"`, which means the same): for any other game they are greyed out, and holding the pointer over them says why, because a game that counts its own ticks would simply run faster. For a game that allows it, GAME and **AUTO** both choose by the screen: 120 updates a second when the screen refreshes 110 times a second or more and the game's work fits, 240 when it refreshes 230 times a second or more and the work is light, 60 otherwise. The line under the switches says which it is: `this game is written for 60 updates a second`, or `this game runs 120 updates a second (AUTO: 120 on a screen of 110 Hz or more, 240 on one of 230 Hz or more, when the game's work fits)`.
 
 The monitor is as wide as its longest line, so no number in it is ever cut short, and it is sized for the window it is in: never too small to read in the editor's run window, and larger on a big screen.
 
-The running game changes at once, the monitor's second line says what is in charge, and both choices are remembered on that computer for every run after, until they are switched back. The monitor is in exported games too, so a player can choose there as well, the way a game's graphics settings let them. A TiberScript 1.2 game shown at 120 draws a new picture in between two updates, from where everything is on its way to the next one.
+The running game changes at once, the monitor's second line says what is in charge, and both choices, and whether the monitor is shown, are remembered on that computer for that game, for every run after, until they are switched back. Another game keeps its own: a monitor left open in one game is not open in the next. The monitor is in exported games too, so a player can choose there as well, the way a game's graphics settings let them. A TiberScript 1.2 game shown at 120 draws a new picture in between two updates, from where everything is on its way to the next one.
 
 ### 21.7 120 and 240 Updates a Second
 
@@ -4497,16 +4659,17 @@ What a game asks the engine for is measured in time, not in updates, and the eng
 - `seconds(n)` and every number of frames given to the engine (`wait()`, `schedule()`, `every`, `tween()`, `shake()`, `flash()`, `time.keep()`, a sequence's waits) are sixtieths of a second, and last exactly as long at 120 and 240.
 - `applyPhysics()` (velocity, gravity and friction), particles, the camera's follow and sprite animations all move at the same speed at 120 and 240 as at 60.
 - A recording keeps the updates a second it was made at, and plays back at it.
+- Every time given to the input helpers is in sixtieths of a second as well: how early a press still counts (`.within(8)`, `.releasedWithin()`), a cooldown (`cooldown("dash", 40)`, and what `cooldownLeft()` says), a held key, action or button repeating (`.repeat`, `pad.repeat()`, `repeats()`), `pad.tapped()`, `pad.longPress()` and `pad.doubleTap()`, and how far `forecast` looks ahead. A dash waits two thirds of a second at 60, 120 and 240 alike. `heldFor` is the one count of updates among them: it says how many updates a button has been held, and `repeats(key("x").heldFor, 24, 6)` still waits 24 sixtieths.
 
 What a game does with its own numbers is up to it: a speed added every update (`hero.x += 2`) runs twice as fast at 120, and four times as fast at 240. Multiply it by `Tiber.tickScale`, or write it per second and multiply by `Tiber.dt` (`hero.x += 120 * Tiber.dt`), and it is the same at both. A counter of updates (`timer += 1` until 60) becomes `timer += Tiber.dt` until 1. That is all a game needs to set `Tiber.tickRate = "auto"`. `time.now` counts updates, so at 120 it counts twice as fast.
 
 Two notes. An online game with rollback must run the same updates a second for every player: keep it at 60, or pick one rate for everyone. And a game that does not set `Tiber.tickRate` is never changed by the switch: it stays at 60 updates, and draws at whatever the pictures switch says.
 
-A whole game can be written for both. A platform game, a climbing game and a game for a phone that set `Tiber.tickRate = "auto"` and `Tiber.frameRate = "auto"` run 120 real updates and 120 pictures a second on a 120 Hz screen, at exactly the speed they run at 60. What it takes, in a game of six thousand lines: every speed added each update multiplied by `Tiber.tickScale`, every number that eases toward another (`x += (target - x) * 0.2`) eased by `1 - (1 - 0.2) ^ Tiber.tickScale` instead, every counter of updates counted in sixtieths, and a check that something happens on one exact update (`if timer == 30`) made a check that the counter just passed it. Measured in a desktop export on a screen made to refresh 60 and then 120 times a second: 60 updates and 60 pictures at 60 Hz, 120 updates and 120 pictures at 120 Hz. And played at both rates side by side by its tests: a second of running covers the same ground, a held jump is as high and lasts as long, a bolt flies as far, a turret fires as often, and a spiral throws the same number of bullets.
+A whole game can be written for both. A game that sets `Tiber.tickRate = "auto"` and `Tiber.frameRate = "auto"` runs 120 real updates and 120 pictures a second on a 120 Hz screen, at exactly the speed it runs at 60. What it takes, in a large game: every speed added each update multiplied by `Tiber.tickScale`, every number that eases toward another (`x += (target - x) * 0.2`) eased by `1 - (1 - 0.2) ^ Tiber.tickScale` instead, every counter of updates counted in sixtieths, and a check that something happens on one exact update (`if timer == 30`) made a check that the counter just passed it. Measured in a desktop export on a screen made to refresh 60 and then 120 times a second: 60 updates and 60 pictures at 60 Hz, 120 updates and 120 pictures at 120 Hz. And played at both rates side by side by tests: a second of running covers the same ground, a held jump is as high and lasts as long, and a shot flies as far and fires as often.
 
 ### 21.8 Locked to the Screen
 
-A screen shows a new picture at a steady beat: 60, 120 or 144 times a second. A game that updates whenever enough time has passed, by the computer's clock, sometimes updates twice in one beat and not at all in the next, and the eye sees that as a stutter, even at a high frame rate. Every TiberScript game is **locked to the screen**: when the screen's beat is a whole number of times the game's updates a second (60 updates on a 60, 120 or 240 Hz screen, 120 updates on a 120 or 240 Hz screen), the engine updates exactly once every one, two, three or four beats, never twice and never skipped, and the pictures drawn in between are shown at exactly the right part of the way. A screen slower than the game by a whole number gets the same care: at 30 pictures a second (a browser that holds the page to 30 to save the battery) the game updates exactly twice in every picture, and at 60 pictures and 120 updates twice as well, never once in one picture and three times in the next. Only when the screen's beat does not match (60 updates on a 144 Hz screen, or a frame that took too long) does it go back to counting time, by the browser's most exact clock. The game never runs faster or slower than it should: a second is still a second.
+A screen shows a new picture at a steady beat: 60, 120 or 144 times a second. A game that updates whenever enough time has passed, by the computer's clock, sometimes updates twice in one beat and not at all in the next, and the eye sees that as a stutter, even at a high frame rate. Every TiberScript game is **locked to the screen**: when the screen's beat is a whole number of times the game's updates a second (60 updates on a 60, 120 or 240 Hz screen, 120 updates on a 120 or 240 Hz screen), the engine updates exactly once every one, two, three or four beats, never twice and never skipped, and the pictures drawn in between are shown at exactly the right part of the way. A screen slower than the game by a whole number gets the same care: at 30 pictures a second (a browser that holds the page to 30 to save the battery) the game updates exactly twice in every picture, and at 60 pictures and 120 updates twice as well, never once in one picture and three times in the next. Only when the screen's beat does not match (60 updates on a 144 Hz screen, or a frame that took too long) does it go back to counting time, by the browser's most exact clock. The game never runs faster or slower than it should: a second is still a second. When the beat changes, because the browser slows down to save the battery or a heavy moment makes every frame longer, two frames in a row of the new length are believed at once, and each of them counts for the time it really took: the game keeps its speed from that very frame, instead of slowing down for half a second and then hurrying to catch up. One frame much longer than the rest, a hiccup, is not caught up with a burst of updates.
 
 ### 21.9 A Long Game Stays Fast
 
@@ -4514,7 +4677,7 @@ A game is not played for a minute. It is left open for an hour, and its last min
 
 - **What is gone leaves.** The engine keeps a list of the objects that carry a tag, for `collide()`, `near()` and the Timeline. An object that calls `vanish()` leaves that list within half a second. The list holds what is in the game, not everything that ever was.
 - **A game that never asks pays nothing.** The list is only kept for a game that uses it: one that asks about tags (`collide()`, `near()`, `touching`, `array.ofObjects()`), keeps time, has physics bodies or saves the whole game. A game that marks its bullets and never asks about a tag keeps no list at all, and its bullets are simply let go.
-- **Pictures in between stay cheap.** At 120 pictures a second (21.2) the engine shows the world part of the way between two updates. It keeps what it needs for that from one update to the next instead of looking at the whole world again, and a world of more than 6,000 objects with numbers to show is drawn once an update until it has fewer, which the console says once.
+- **Pictures in between stay cheap.** At 120 pictures a second (21.2) the engine shows the world part of the way between two updates. It keeps what it needs for that from one update to the next instead of looking at the whole world again, and a world of more than 6,000 objects with numbers to show is drawn once an update until it has fewer. The performance monitor's frameRate line says so while it lasts, and `Tiber.smooth` is `false` then: it is not a mistake in the game, so the console stays quiet.
 - **Call `vanish()` on what is done.** A bullet off the screen, an enemy defeated, a coin picked up: an object given a tag with `mark()` stays in the world until its `vanish()` is called. A game that forgets is told. At 20,000 objects that were marked and never taken out, the console says what is happening and what to call, long before a player would feel it.
 
 A game that makes thousands of short lived things every second is what a `swarm` is for (Part Two of Section 19): its members are numbers in columns, and one that is despawned is gone at once.
@@ -4551,36 +4714,51 @@ end
 ```
 
 - **Let the engine choose.** `Tiber.frameRate = "auto"` draws as often as the screen and the computer can, and `Tiber.renderScale = "auto"` draws fewer pixels when the frame rate asks for it and all of them when it does not (21.2 and 21.3). These two lines do more for an old computer than anything a game's own code can.
-- **Spend where it shows.** What costs is drawing, not logic: a frame of a whole platform game's logic is a few hundredths of a millisecond (Section 19, Part Three). A thousand shapes cost more than a thousand `if`s. Draw a crowd as a `swarm` (Part Two), which hands the screen one shape for all of it, and draw what never changes once, into a layer (Section 8).
+- **Spend where it shows.** What costs is drawing, not logic: a frame of a whole game's logic is a few hundredths of a millisecond (Section 19, Part Three). A thousand shapes cost more than a thousand `if`s. Draw a crowd as a `swarm` (Part Two), which hands the screen one shape for all of it, and draw what never changes once, into a layer (Section 8).
 - **Scale the decoration, never the game.** The example above asks for forty sparks, and for ten when the computer is slow: `system.fps` is the frames drawn in the last second. Particles, the number of lights that throw shadows (Section 23.12), a filter on the whole frame: these can shrink and the game is the same game. Enemies, bullets and physics cannot, or the game plays differently on a slow computer.
 - **Keep lights few and filters short.** A light with shadows is the heaviest thing in Section 23, and `effects.filter()` runs for every pixel of the screen. `quality = 0.5` on a shader works out a quarter of the pixels (19.37).
 - **Do not make garbage.** A list made new every frame is thrown away every frame, and sooner or later the browser stops the game to clean up. Make lists in `init()`, empty them and fill them again, and let a `swarm` hold what comes and goes by the thousand.
-- **Look at the numbers on that computer.** F3 shows the frame rate, the time of an update and of a draw, and the garbage collections, on the computer the game is running on. `Tiber.forge.hot()` (19.25) names the functions that take the time.
+- **Look at the numbers on that computer.** With the PerfMonitor library in the project and a key picked for it, the monitor shows the frame rate that computer's screen really shows, the 1% low, the frames dropped, and the time of an update and of a draw (21.6). `Tiber.forge.hot()` (19.25) names the functions that take the time.
 - **Respect the player's settings.** `Tiber.motion` for shake and flash (Section 13), the volume channels (Section 8), and a pause that really pauses.
 
-A controller is part of this too. On the computer microStudio runs on, the three console makers' controllers are read the moment they report (Section 7), so an old laptop with a slow browser does not make a controller slow.
+A controller is part of this too. On the computer microStudio runs on, every controller is read the moment it reports (Section 7), so an old laptop with a slow browser does not make a controller slow.
 
-### 21.11 The Settings Screen Every Game Has
+### 21.11 The Settings Screen: the Settings Library
 
-How many pictures a second, how many pixels, how hard a button has to be pressed: the right answer is different on every computer and in every pair of hands, and only the player knows theirs. So every TiberScript game has a settings screen, drawn by the engine, the same in each of them. A game does nothing to have it.
+How many pictures a second, how many pixels, how loud, which key does what, how hard a button has to be pressed: the right answer is different on every computer and in every pair of hands, and only the player knows theirs. So TiberScript 1.2 comes with a settings screen as a library, Settings, the same in every game that adds it, and the one library recommended for every TiberScript 1.2 game: open the code editor, press Import Libraries and pick Settings, listed first, above the Built In Libraries. Its file is added to the project as `lib-builtin-settings`, yours to read and change. It looks like the performance monitor, a dark panel with the choice of each line in a blue pill, in a font of its own that never changes the game's.
 
-**F4 opens it**, in any game, at any moment. On a controller, START and SELECT held together for three quarters of a second do the same. The game waits behind it, exactly where it was: nothing updates while the screen is open, and the game goes on from the same tick when it closes. The arrows, the D pad or a stick move through it, and a held direction keeps moving.
+**The game chooses what opens it.** No key opens it until the game picks one, so it never takes a key the game already uses. In `init()`:
 
-| Line | What it sets | Choices |
-| --- | --- | --- |
-| PICTURES A SECOND | `Tiber.frameRate` | auto, 60, 120 |
-| PICTURE | `Tiber.resolution` | native, 720, 1080, 1440, 4k |
-| DETAIL | `Tiber.renderScale` | auto, 100%, 75%, 50% |
-| SHADERS | `Tiber.shaderScale` | auto, 100%, 75%, 50%, 25% |
-| SHAKE AND FLASH | `Tiber.motion` | 100%, 75%, 50%, 25%, 0% |
-| RUMBLE | how strong every `rumble()` is | full, half, off |
-| CONTROLLER FEEL | `controllers.feel` | fast, normal, precise, relaxed |
-| BUTTON PRESS | `controllers.threshold` | auto, instant (0.05), light (0.1), normal (0.2), firm (0.4), hard (0.6) |
-| STICK REST | `controllers.deadzone` | auto, none (0), tiny (0.05), small (0.1), normal (0.15), wide (0.25), widest (0.35) |
-| STICK FEEL | `controllers.curve` | quick (0.7), straight (1), fine (1.5), finer (2) |
-| MOMENTS | `capture.auto` and `capture.clips` (Section 26) | off, pictures, pictures and clips |
-| SET UP A CONTROLLER | the screen of `controllers.setup()` | |
-| AS THE GAME STARTED | puts every line back to what the game itself set | |
+```text
+Settings.key = "escape"       a key that opens it, and closes it again
+Settings.button = "start"     a controller button that does the same
+```
+
+Any name `key()` knows works for the key: `"escape"`, `"p"`, `"tab"`, `"m"`, `"backquote"`, `"enter"`. With both left empty, as a game starts, only the game opens it, from a menu of its own, with `Tiber.settings.open()`.
+
+**It is the game's pause as well.** The game waits behind it, exactly where it was: no update runs, no timer, tween or shake moves, the music waits, and the game goes on from the same tick when it closes. With `Settings.pauseWhenHidden = true` it opens by itself when the game's window is hidden, so a player who looks away comes back to a paused game. The arrows, W and S, the D pad or a stick move through it, and a held direction keeps moving. Enter, Space or the confirm button chooses, left and right change a line, and Escape or the cancel button goes back. The mouse and a finger work too: point at a line, then click or tap it.
+
+Its first page has RESUME, PICTURE, SOUND and CONTROLS, then START AGAIN and QUIT when the game says what they do, and DEFAULTS, which asks once more before it puts every line back as the game started. A line shows only when it does something in that game: SHADERS once the game has drawn a shader, SHAKE AND FLASH once it has shaken or flashed the screen, KEYS when the game binds an action to a key, and the lines of how a controller feels once a controller is connected.
+
+| Page | Line | What it sets | Choices |
+| --- | --- | --- | --- |
+| PICTURE | PICTURES A SECOND | `Tiber.frameRate` | auto, 60, 120 |
+| PICTURE | PICTURE | `Tiber.resolution` | native, 720, 1080, 1440, 4k |
+| PICTURE | DETAIL | `Tiber.renderScale` | auto, 100%, 75%, 50% |
+| PICTURE | SHADERS | `Tiber.shaderScale` | auto, 100%, 75%, 50%, 25% |
+| PICTURE | SHAKE AND FLASH | `Tiber.motion` | 100%, 75%, 50%, 25%, 0% |
+| PICTURE | MOMENTS | `capture.auto` and `capture.clips` (Section 26) | off, pictures, pictures and clips |
+| SOUND | MUSIC | how loud the music plays, the channel `audio.setVolume("music", level)` sets | 100% to 10% in steps of ten, off |
+| SOUND | SOUNDS | how loud every sound plays, the channel `"sfx"` | 100% to 10% in steps of ten, off |
+| CONTROLS | KEYS | a new key for each action the game binds (Section 7) | |
+| CONTROLS | CONTROLLER CHECK | a controller, step by step, with its picture lit where to press: every button, both triggers all the way, both sticks in all sixteen directions, how fast taps get through, and whether it drifts or presses by itself with nobody touching it | |
+| CONTROLS | RUMBLE | how strong every `rumble()` is | full, half, off |
+| CONTROLS | CONTROLLER FEEL | `controllers.feel` | fast, normal, precise, relaxed |
+| CONTROLS | BUTTON PRESS | `controllers.threshold` | auto, instant (0.05), light (0.1), normal (0.2), firm (0.4), hard (0.6) |
+| CONTROLS | STICK REST | `controllers.deadzone` | auto, none (0), tiny (0.05), small (0.1), normal (0.15), wide (0.25), widest (0.35) |
+| CONTROLS | STICK FEEL | `controllers.curve` | quick (0.7), straight (1), fine (1.5), finer (2) |
+
+KEYS lists every action the game binds and what each is bound to. A player picks one and presses a new key for it: the new key takes the place of the first key it had, a controller button bound to it stays, and the new key is kept for the game and set again each time it starts.
 
 **What the player chose is kept.** It is kept for that game, with the game's saves, and set again each time the game starts, after `init()` has run: so what a game sets in `init()` is where the screen starts, and what a player changed stays changed. A line the player never touched is left to the game.
 
@@ -4619,19 +4797,76 @@ end
 
 | What | What it does |
 | --- | --- |
-| `Tiber.settings.open()`, `.close()` | opens and closes the screen |
+| `Tiber.settings.open()`, `.close()` | opens and closes the screen of the Settings library (without the library, `open()` says so once, as a warning) |
 | `Tiber.settings.isOpen` | `true` while it is open |
 | `Tiber.settings.next(name)` | moves one line to its next choice, keeps it, and gives the new value back |
+| `Tiber.settings.previous(name)` | the same, to the choice before |
+| `Tiber.settings.lines` | every line there is, for a screen of a game's own: each a `data` with `name`, `label`, `choices`, `names` (each choice as the screen writes it) and `hint` |
 | `Tiber.settings.set(name, value)` | sets one line and keeps it |
 | `Tiber.settings.get(name)` | the value of one line now |
 | `Tiber.settings.name(name)` | the choice of one line as the screen writes it: `"firm"`, `"half"`, `"75%"` |
 | `Tiber.settings.changed` | the names of the lines the player has changed |
 | `Tiber.settings.reset()` | every line as the game started, and nothing kept |
 | `Tiber.settings.rumble` | how strong rumble is, from 0 to 1 |
-| `Tiber.settings.key` | the key that opens the screen, `"f4"` unless it is set. `null` leaves the opening to the game |
-| `Tiber.settings.combo` | whether START with SELECT opens it, `true` unless it is set |
+| `Tiber.settings.combo` | `true` makes START and SELECT held together count, for a game that opens its screen that way. Off unless it is set |
+| `Tiber.settings.comboHeld` | `true` on the tick START and SELECT have been held together for three quarters of a second, while `combo` is on |
+| `Tiber.settings.screen` | the screen that opens: the Settings library sets itself here, and a game can set its own |
 
-The names are `"frameRate"`, `"resolution"`, `"renderScale"`, `"shaderScale"`, `"motion"`, `"rumble"`, `"threshold"`, `"deadzone"` and `"curve"`.
+The library's own names are `Settings.key` and `Settings.button` (what opens it), `Settings.open()`, `Settings.close()`, `Settings.isOpen`, `Settings.check()` (straight to the Controller Check), `Settings.results` (what each Controller Check found: the controller, and each step with whether it passed), `Settings.title` (the name at the top of the screen), `Settings.pauseWhenHidden`, `Settings.music` (`true`, as it starts: the music waits while it is open), and the two functions START AGAIN and QUIT run:
+
+```text
+Settings.onRestart = function()
+  startLevel()
+end
+Settings.onQuit = function()
+  transit("title")
+end
+```
+
+The names are `"frameRate"`, `"resolution"`, `"renderScale"`, `"shaderScale"`, `"motion"`, `"capture"`, `"music"`, `"sounds"`, `"rumble"`, `"feel"`, `"threshold"`, `"deadzone"` and `"curve"`.
+
+### 21.12 Screens Over the Game: Tiber.hold
+
+The Settings library is TiberScript, written with three things any game can use for a screen of its own:
+
+```tiberscript
+inventory = data
+  open = false
+end
+
+inventory.update = function()
+  if key("i").hit or key("escape").hit then
+    inventory.open = false
+    Tiber.release(inventory)
+  end
+end
+
+inventory.draw = function()
+  screen.fillRound(0, 0, 200, 120, 0.05, "rgba(10,12,20,0.9)")
+  screen.text("INVENTORY", 0, 44, 10, "#9FE870")
+end
+
+watchInventory() = function
+  if not inventory.open and key("i").hit then
+    inventory.open = true
+    Tiber.hold(inventory)
+  end
+end
+
+Tiber.everyTick(watchInventory)
+
+steps = 0
+
+update() = function
+  steps += 1
+end
+```
+
+- **`Tiber.hold(screen)`** holds the game behind a screen: a `data` with an `update()` and a `draw()`. While it is held, the screen's `update()` runs in place of the game's own `update()`, and its `draw()` after the game's own drawing, on top, in screen places, with the game's font put back after it. Nothing of the game moves, and it goes on from the same tick when it is let go. `Tiber.release()` lets it go, and `Tiber.held` is the screen holding the game, or `null`.
+- **`Tiber.everyTick(fn)`** runs `fn` every tick, held or not, after the keys, the controllers and the actions are read and before the game's own `update()`: how a screen watches for its key. A file saved while the game runs replaces its function rather than adding a second one.
+- **`Tiber.bindings`** lists every action and what it is bound to: each a `data` with `action`, `inputs` (as `bind()` was given them) and `names` (a key as its name, a controller button as `"pad south"`, a touch button as `"touch jump"`). It is how the Settings library's KEYS page shows a game's own controls, and gives an action a new key.
+
+`Tiber.hasFeature("hold")` and `Tiber.hasFeature("every tick")` say a game can use them.
 
 ## 22. Built In Platform SDKs: Steam, Epic, and the Consoles
 
@@ -5128,9 +5363,72 @@ end
 
 The side and the strength can follow the size as plain values, and every one of them can be given by name: `screen.water(0, -50, 400, 100, ripple = 3, tint = "#103050")`.
 
-They belong with everything else here. A reflection is painted before the light, so the lights and the dark fall on it as on the rest of the picture, and a lantern over a lake is reflected lit. Effects and filters (23.10, 23.11) are a finish on the whole frame, the reflection included. Nothing about a mirror or water is kept from one frame to the next: rewind the game and the reflection is of the world as it was, and the ripples move with the game's time, so they stop when time stops and slow when it slows. `Tiber.hasFeature("mirrors")` and `Tiber.hasFeature("water")` say the engine has them.
+They belong with everything else here. A reflection is painted before the light, so the lights and the dark fall on it as on the rest of the picture, and a lantern over a lake is reflected lit. Effects and filters (23.10, 23.11) are a finish on the whole frame, the reflection included. Nothing about a mirror or water is kept from one frame to the next: rewind the game and the reflection is of the world as it was, and the ripples move with the game's time, so they stop when time stops and slow when it slows. `Tiber.hasFeature("mirrors")`, `Tiber.hasFeature("water")` and `Tiber.hasFeature("reflect")` say the engine has them.
+
+**A mirror along any line.** `screen.reflect(x1, y1, x2, y2, depth)` is a mirror that is a line, turned any way: a mirror on a stand that a player can turn, a slanted pane, a mirror on a wall. Behind the line, as deep as `depth`, it shows the mirror picture of what is in front of it, the way a real mirror does: what is close to the line shows close behind it, and what moves toward it moves toward it in the mirror too. The front is the side to the left of the line going from `(x1, y1)` to `(x2, y2)`: up, for a line drawn from left to right. `strength` (0.85 unless told), `tint`, `tintAmount` and `fade` (how much fainter it is at its far edge, 0.35 unless told) work as for `screen.mirror()`. Called after `lighting.draw()`, it shows the room lit, as a mirror would; `lighting.mirror()` along the same line throws the light back too.
+
+```tiberscript
+turn = 30
+
+update() = function
+  if key("q").held then turn += 2 end
+  if key("e").held then turn -= 2 end
+end
+
+draw() = function
+  screen.clear("#1B2033")
+  screen.fillCircle(-40, 10, 8, "#FFD750")
+  screen.fillRect(-20, -30, 14, 14, "#C08850")
+  local x1 = 20 + cosd(turn) * 30
+  local y1 = sind(turn) * 30
+  local x2 = 20 - cosd(turn) * 30
+  local y2 = -sind(turn) * 30
+  screen.reflect(x1, y1, x2, y2, 40, 0.8, tint = "#CFEAFF", fade = 0.5)
+  screen.line(x1, y1, x2, y2, 3, "#CFEAFF")
+end
+```
 
 What it is not: a mirror shows what is on the screen beside it, so something off the screen is not in it, and a mirror does not show what another mirror shows.
+
+### 23.14 Lenses and Shockwaves
+
+Two more ways to bend what is already drawn, as a shader with `pixel()` can (19.30), but with the picture copied onto itself in rings, each drawn a little smaller or larger than it is. A picture copied onto itself never leaves the browser's own drawing, so both cost about what a rectangle costs, in every browser.
+
+```tiberscript
+init() = function
+  boom = 0
+  t = 0
+end
+
+update() = function
+  t += 1
+  if keyboard.press.SPACE then boom = 0 end
+  boom = min(1, boom + 0.02)
+end
+
+draw() = function
+  screen.clear("#0B0A20")
+  for i = 0 to 40 do
+    screen.fillCircle((i * 37) % 360 - 180, (i * 53) % 200 - 100, 2, "#C8D8FF")
+  end
+  screen.lens(60, 20, 50, 1.5, core = 0.2, spin = 1, ring = "#E0A8FF")
+  if boom < 1 then screen.shockwave(-60, 0, boom * 150, 20, 10 * (1 - boom), "#4DB3FF", amount = 0.5 * (1 - boom)) end
+end
+```
+
+A black hole bends the stars round it, and SPACE sends a ring of light across the screen that pushes them outward as it passes.
+
+`screen.lens(x, y, radius)` bends the picture inside a circle. Its `strength` (0.6 unless said) above 0 pulls the picture in toward the middle, the way gravity bends light round a black hole: at the middle it shows what is `1 + strength` times as far out. Below 0 it swells the picture instead, a magnifying glass or a bubble; it goes from 0.9 below 0 to 4 above it. At its edge it bends nothing, so it has no seam.
+
+| Value | What it does | Unless said |
+| --- | --- | --- |
+| `strength` | how much it pulls in (above 0) or swells (below 0) | 0.6 |
+| `core` | the dark middle, as a share of the radius; 0 for none | 0.3 |
+| `spin` | how far the middle is turned round, in radians, less toward the edge | 0 |
+| `ring`, `ringAmount` | a bright ring round the core, and how bright | none, 0.8 |
+| `rings` | how many rings it is drawn in, from 2 to 32 | 12 |
+
+`screen.shockwave(x, y, radius, width, push, color)` is a ring `width` wide at `radius` from the middle. The picture under it is pushed outward by `push` (inward when it is below 0), most in the middle of the ring and not at all at its edges, and `color` is added over it, as strong as `amount` (0.4 unless said). Grow its radius from 0 and let its push and its amount fall to 0, and it is the wave of an explosion. Both take every value by name as well, and both, like a mirror, show what is on the screen, so they are drawn after what they bend.
 
 ---
 
@@ -5328,13 +5626,45 @@ end
 
 **Clips.** `capture.clips = true` keeps the last few seconds of the game, small, a picture every fourth frame, in a ring that is written over as the game goes on, so a moment comes with what led to it. The ring is sized by the computer's memory: a computer with four gigabytes or less keeps half as much, smaller.
 
-**What is kept, and how to use it.** `capture.list` is every picture and clip kept, oldest first; each has a `name`, a `kind` (`"picture"` or `"clip"`), the `tick` it was taken on, and its `width` and `height`. `capture.last` is the newest and `capture.count` how many there are. The sixteen newest pictures and the four newest clips are kept (eight and two on a computer with four gigabytes or less), and each picture is turned into a small compressed file as soon as it is taken. `capture.save(item)` hands one to the player as a file, a picture as a PNG and a clip as a video; `capture.clear()` lets every one of them go. The `"captured"` event (Section 6) runs for each one kept, with the picture or clip.
+**What is kept, and how to use it.** `capture.list` is every picture and clip kept, oldest first; each has a `name`, a `kind` (`"picture"` or `"clip"`), the `tick` it was taken on, and its `width` and `height`. `capture.last` is the newest and `capture.count` how many there are. The sixteen newest pictures and the four newest clips are kept (eight and two on a computer with four gigabytes or less), and each picture is turned into a small compressed file as soon as it is taken. `capture.save(item)` hands one to the player as a file, a picture as a PNG and a clip as a video; `capture.clear()` lets every one of them go. The `"captured"` event (Section 6) runs for each one kept, with the picture or clip. A browser does not let a game read a picture drawn with images from another place, which is the case for a game opened from a file on the computer itself: the moment is still kept and `"captured"` still runs, with no picture in it.
+
+**What the game keeps with it.** `capture.shot(name, info)` and `capture.moment(name, info)` keep anything the game hands them with the picture or the clip, read back as `item.info`: the level, the score, the time of the run, whatever makes the moment worth showing again. A clip also has `frames`, how many pictures it holds, and `fps`, how many it holds for each second of the game.
+
+**A viewer of the game's own.** `capture.draw(item, x, y, w, h, frame)` draws a kept picture on the screen as if it were a sprite, centered on `x, y`, `w` wide and `h` high: with no size it keeps its own shape. For a clip, `frame` picks which of its pictures, counted from 0, so a game steps through a clip one picture at a time, plays it, or shows its last frame on a game over screen. `capture.frameTick(item, frame)` is the tick that picture was taken on. A gallery, a replay of the run's best moment, and a photo mode are a few lines each:
+
+```tiberscript
+init() = function
+  capture.clips = true
+  shown = 0
+  frame = 0
+end
+
+update() = function
+  if key("p").hit then capture.moment("by hand", data(score = 1200, level = 3)) end
+  if key("right").hit and capture.count > 0 then
+    shown = (shown + 1) % capture.count
+    frame = 0
+  end
+  frame += 1
+end
+
+draw() = function
+  screen.clear("#101020")
+  if capture.count > 0 then
+    local it = capture.list[shown]
+    local at = frame % max(1, it.frames)
+    capture.draw(it, 0, 10, 160, 90, at)
+    screen.text(it.name + "   tick " + capture.frameTick(it, at), 0, -50, 8, "#FFFFFF")
+    if it.info != null then screen.text("score " + it.info.score, 0, -62, 8, "#FFD750") end
+  end
+end
+```
 
 When something is kept, a notice in the corner says so, for two seconds: `PICTURE: the boss falls`. `capture.quiet = true` keeps the notice away, for a game that shows its pictures its own way.
 
 **What is never a moment.** A forecast, a replay or a tick the Timeline is working out (Section 19) is not the real present, and nothing in it is kept.
 
-**The player decides too.** The settings screen every game has (21.11) has a line for it, MOMENTS: off, pictures, or pictures and clips. What the player chooses there is kept for that game, like every other line, and comes after what the game itself set.
+**The player decides too.** The screen of the Settings library (21.11) has a line for it, MOMENTS: off, pictures, or pictures and clips. What the player chooses there is kept for that game, like every other line, and comes after what the game itself set.
 
 ```tiberscript
 init() = function
