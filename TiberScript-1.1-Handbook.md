@@ -8,7 +8,7 @@
 
 **Special Thanks to:** gilles who created microStudio and created microScript!
 
-> **This is the 1.1 Handbook, checked on 10/26/2026.** It describes TiberScript 1.1 exactly as its engine runs it, and every example in it runs; the full example at the end is played by microStudio's own tests. 1.1 is kept inside microStudio, frozen, for projects that already use it, and it is no longer offered in the language menu. The 1.2 Handbook is the next version, and it is the TiberScript every new project runs. Everything in this handbook still works there, with the rest of a full game on top: modules, controllers, the Timeline, swarms, the Forge, light, achievements and leaderboards. A 1.1 program can also be kept exactly as it is inside a 1.2 project: write `Tiber.version = "1.1"` on the first line of its file, or put the code between `tiberscript 1.1` and `end`, and 1.2 reads it by the 1.1 rules, the loop counters of Section 1 included. It builds on the 1.0 Handbook, and the 1.1 Tutorial teaches the same things one lesson at a time.
+> **This is the 1.1 Handbook, checked on 11/24/2026.** It describes TiberScript 1.1 exactly as its engine runs it, and every example in it runs; the full example at the end is played by microStudio's own tests. 1.1 is kept inside microStudio, frozen, for projects that already use it, and it is no longer offered in the language menu. The 1.2 Handbook is the next version, and it is the TiberScript every new project runs. Everything in this handbook still works there, with the rest of a full game on top: modules, controllers, the Timeline, swarms, the Forge, light, achievements and leaderboards. A 1.1 program can also be kept exactly as it is inside a 1.2 project: write `Tiber.version = "1.1"` on the first line of its file, or put the code between `tiberscript 1.1` and `end`, and 1.2 reads it by the 1.1 rules, the loop counters of Section 1 included. It builds on the 1.0 Handbook, and the 1.1 Tutorial teaches the same things one lesson at a time.
 
 ---
 
@@ -76,7 +76,7 @@ The last check before 1.2 went through the engine line by line against this hand
 - **Changing code while the game runs keeps the game.** Saving a file reruns only that file's top level: functions and archetypes take the new code, objects already made use the new methods at once, and every other variable keeps its value. It used to start the program over without running `init()` again, and resizing the game window did the same.
 - **`level.spawn = data` and `player.jump() = function`** set a field. They used to make a global whose name had a dot in it.
 - **A warning is printed once** for each line that gives it, with a count, instead of sixty times a second from a draw call with a missing sprite or map.
-- **About 2.4 times faster.** The engine used to read each line's text again every time the line ran. It now reads each line once and keeps what it understood: the frame of a platform game of six thousand lines went from 5.4 ms to 2.2 ms, and it makes a fifth of the garbage.
+- **About 2.4 times faster.** The engine used to read each line's text again every time the line ran. It now reads each line once and keeps what it understood: the frame of a large game went from 5.4 ms to 2.2 ms, and it makes a fifth of the garbage.
 
 ---
 
@@ -636,6 +636,7 @@ These are microStudio's own, the same ones every other microStudio language read
 
 * **`touch.touching`** is 1 while a finger is on the screen, **`touch.x`** and **`touch.y`** are where the first one is, and **`touch.touches`** is a list of every finger, each with an `x` and a `y`.
 * **`gamepad.A`**, **`gamepad.B`**, **`gamepad.X`**, **`gamepad.Y`**, **`gamepad.LB`**, **`gamepad.RB`**, **`gamepad.UP`**, **`gamepad.DOWN`**, **`gamepad.LEFT`**, **`gamepad.RIGHT`**, **`gamepad.MENU`** are 1 while held, and **`gamepad.press.A`** (and so on) is 1 on the frame it is pressed.
+* The buttons are named by where they are, as on an Xbox controller: **A** is the bottom face button, **B** the right one, **X** the left one and **Y** the top one, on every controller and in every browser, Sony's and Nintendo's included. The D pad and both sticks move `UP`, `DOWN`, `LEFT` and `RIGHT`.
 
 ```tiberscript
 if touch.touching and touch.x > 0 then player.x += 3 end
@@ -1083,6 +1084,8 @@ TiberScript runs inside microStudio, and reads the same things every other micro
 
 * **`sprites`**, **`maps`**, **`sounds`**, **`music`**, **`assets`**: what the project has. `for name in sounds do` visits every sound's name, and `maps["level1"].get(x, y)` reads a tile.
 * **`new Map(width, height, tileWidth, tileHeight)`**: a tile map made in code, with `.set(x, y, tile)` and `.get(x, y)`.
+* **Tilesets in a map:** a tile painted from a square of a bigger sprite reads as `"stone:3,1"` from `maps["level1"].get(x, y)`: the sprite's name, then the square's column and row in it. Row 0 of a map is its bottom row.
+* **`asset_manager.loadJSON(name)`**, **`.loadCSV(name)`**, **`.loadText(name)`**, **`.loadMarkdown(name)`**: the project's own JSON, CSV, text and Markdown files from its Assets tab. Each gives back a loader at once; its `ready` is 1 once the file is in, and then `data` holds what a JSON file says and `text` holds the others as written.
 * **`system.time()`**, **`system.fps`**, **`system.language`**, **`system.update_rate`**: the clock in milliseconds, the frame rate, the language, and how many updates a second. `screen.text(system.fps + " fps", -150, 90, 10, "white")` puts a frame counter in a corner of your game.
 * **The developer overlay:** press **F3** while any game runs, in the editor or in an exported game, or click the gauge button next to the camera in the run window. It shows the frame rate, how long each frame's `update()` and `draw()` took, the slow frames, the canvas size and a graph of the last few seconds, and it says when the browser, not your game, is holding the frame rate down (Low Power Mode on a Mac, for one). It is drawn on its own layer, so it never shows in a picture or a video of the game.
 * **`storage.set(name, value)`** / **`storage.get(name)`**: saved values, kept between visits.
@@ -1092,7 +1095,7 @@ TiberScript runs inside microStudio, and reads the same things every other micro
 
 ## 14. Honest Limits
 
-1.1 reads your script as text and runs it a line at a time. That makes it simple, forgiving and easy to debug, and it makes it slower than a compiled language. A platform game of six thousand lines, with five bosses and a crowd of enemies, spends about 2.2 ms of each 16.7 ms frame running its logic, which is plenty for an arcade game and not enough for a hundred thousand bullets. (It was 5.4 ms until the final 1.1 check taught the engine to remember each line once it has read it.) Keep the per frame work to what the frame needs: build lists once instead of every frame, and loop over what exists rather than over a whole map. 1.2's Forge compiles TiberScript and removes this limit.
+1.1 reads your script as text and runs it a line at a time. That makes it simple, forgiving and easy to debug, and it makes it slower than a compiled language. A large game, with a crowd of enemies on the screen, spends about 2.2 ms of each 16.7 ms frame running its logic, which is plenty for an arcade game and not enough for a hundred thousand bullets. (It was 5.4 ms until the final 1.1 check taught the engine to remember each line once it has read it.) Keep the per frame work to what the frame needs: build lists once instead of every frame, and loop over what exists rather than over a whole map. 1.2's Forge compiles TiberScript and removes this limit.
 
 Variables are global unless you say `local`, and so are loop counters (Section 1).
 
