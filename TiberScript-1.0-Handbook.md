@@ -8,7 +8,7 @@
 
 **Special Thanks to:** gilles who created microStudio and created microScript!
 
-> **This is the 1.0 Handbook, checked on 10/26/2026.** Every example in it runs on today's TiberScript engine in microStudio, and the full example at the end is played to its ending by microStudio's own tests. 1.0 is the core of the language: the 1.1 Handbook has everything 1.0 has and more, and the 1.2 Handbook is the newest version, the one microStudio runs. A program written for 1.0 still runs there as it is. To be sure it is read by the 1.0 rules, write `Tiber.version = "1.0"` on the first line of its file, or put the code between `tiberscript 1.0` and `end`; the 1.2 Handbook has both in its Section 1. The 1.0 Tutorial teaches the same things one lesson at a time.
+> **This is the 1.0 Handbook, checked on 11/24/2026.** Every example in it runs on today's TiberScript engine in microStudio, and the full example at the end is played to its ending by microStudio's own tests. 1.0 is the core of the language: the 1.1 Handbook has everything 1.0 has and more, and the 1.2 Handbook is the newest version, the one microStudio runs. A program written for 1.0 still runs there as it is. To be sure it is read by the 1.0 rules, write `Tiber.version = "1.0"` on the first line of its file, or put the code between `tiberscript 1.0` and `end`; the 1.2 Handbook has both in its Section 1. The 1.0 Tutorial teaches the same things one lesson at a time.
 
 ---
 
